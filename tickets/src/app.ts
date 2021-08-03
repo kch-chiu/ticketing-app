@@ -9,7 +9,6 @@ const app = express();
 
 const schema = buildFederatedSchema([{ typeDefs, resolvers }]);
 
-
 const server = new ApolloServer({ schema });
 
 server.applyMiddleware({ app });

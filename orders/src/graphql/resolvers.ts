@@ -8,7 +8,7 @@ interface OrderData {
   allOrders: [Order];
 }
 
-const getClient = (): GraphQLClient => graphQLClientWrapper.client;
+const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
 
 const resolvers: Resolvers = {
   Order: {

@@ -8,7 +8,7 @@ interface TicketData {
   allTickets: [Ticket];
 }
 
-const getClient = (): GraphQLClient => graphQLClientWrapper.client;
+const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
 
 const resolvers: Resolvers = {
   Ticket: {
@@ -97,9 +97,8 @@ const resolvers: Resolvers = {
 
       const { price } = inputData;
 
-      if (price <= 0) {
+      if (price <= 0)
         throw new UserInputError("Price must be greater than 0");
-      }
 
       const addition = inputData;
 
@@ -132,9 +131,8 @@ const resolvers: Resolvers = {
 
       const { price } = inputData;
 
-      if (price <= 0) {
+      if (price <= 0)
         throw new UserInputError("Price must be greater than zero");
-      }
 
       const patch = {
         filter: {

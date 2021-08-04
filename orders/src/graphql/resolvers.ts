@@ -117,7 +117,7 @@ const resolvers: Resolvers = {
 
       const { status } = inputData;
 
-      if (_.includes(Object.values(OrderStatus), status) === false)
+      if (_.includes(OrderStatus, status) === false)
         throw new UserInputError("Status is not a valid status");
 
       // Create a mutation.
@@ -152,7 +152,7 @@ const resolvers: Resolvers = {
 
       const { status } = inputData;
 
-      if (_.includes(Object.values(OrderStatus), status) === false)
+      if (_.includes(OrderStatus, status) === false)
         throw new UserInputError("Status is not a valid status");
 
       const patch = {

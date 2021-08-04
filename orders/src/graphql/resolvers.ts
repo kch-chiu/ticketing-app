@@ -2,10 +2,20 @@ import { Resolvers, OrderStatus, Order } from "./types";
 import { graphQLClientWrapper } from "../GraphQLClientWrapper";
 import { UserInputError } from "apollo-server-express";
 import { GraphQLClient, gql } from "graphql-request";
+import _ from 'lodash';
 
 interface OrderData {
   getOrder: Order;
   allOrders: [Order];
+  addOrder: {
+    order: Order
+  }
+  updateOrder: {
+    order: Order
+  }
+  deleteOrder: {
+    order: Order
+  }
 }
 
 const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
@@ -13,19 +23,19 @@ const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.clien
 const resolvers: Resolvers = {
   Order: {
     __resolveReference: async ({ orderId }) => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
       const query = gql`
-          query {
-            getOrder(orderId: ${orderId}) {
-              orderId
-              status
-              ticket
-            }
+        query {
+          getOrder(orderId: ${orderId}) {
+            orderId
+            status
+            ticket
           }
-        `;
+        }
+      `;
 
       // Run query and get order.
       let data;
@@ -34,6 +44,9 @@ const resolvers: Resolvers = {
       } catch (error) {
         throw new UserInputError("Invalid orderId");
       }
+
+      if (_.isEmpty(data.getOrder))
+        throw new UserInputError("Order cannot be found");
 
       return data.getOrder;
     },
@@ -44,13 +57,13 @@ const resolvers: Resolvers = {
   },
   Query: {
     allOrders: async () => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
       const query = gql`
         query {
-          allOrders: queryOrder(filter: { has: orderId }) {
+          allOrders: queryOrder {
             orderId
             status
             ticket
@@ -69,19 +82,19 @@ const resolvers: Resolvers = {
       return data.allOrders;
     },
     getOrder: async (_: any, { orderId }) => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
       const query = gql`
-          query {
-            getOrder(orderId: ${orderId}) {
-              orderId
-              status
-              ticket
-            }
+        query {
+          getOrder(orderId: ${orderId}) {
+            orderId
+            status
+            ticket
           }
-        `;
+        }
+      `;
 
       // Run query and get order.
       let data;
@@ -91,12 +104,15 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
+      if (_.isEmpty(data.getOrder))
+        throw new UserInputError("Cannot find order")
+
       return data.getOrder;
     },
   },
   Mutation: {
-    createOrder: async (_: any, { data: inputData }) => {
-      // Get an instance of Apollo Client.
+    addOrder: async (_: any, { data: inputData }) => {
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       const addition = {
@@ -120,23 +136,31 @@ const resolvers: Resolvers = {
       // Run mutation.
       let data;
       try {
-        data = <Order>await client.request(mutation);
+        data = <OrderData>await client.request(mutation);
       } catch (error) {
         throw new UserInputError("Invalid tickedId");
       }
 
-      return data;
+      if (_.isEmpty(data.addOrder.order.ticket))
+        throw new UserInputError("Cannot create order since ticketId not found");
+
+      return data.addOrder.order;
     },
-    cancelOrder: async (_: any, { orderId }) => {
-      // Get an instance of Apollo Client.
+    updateOrder: async (_: any, { orderId, data: inputData }) => {
+      // Get an instance of GraphQL Client.
       const client = getClient();
+
+      const { status } = inputData;
+
+      if (Object.values(OrderStatus).includes(status) === false)
+        throw new UserInputError("Status is not a valid status");
 
       const patch = {
         filter: {
           orderId,
         },
         set: {
-          status: OrderStatus.Cancelled,
+          ...inputData,
         },
       };
 
@@ -156,30 +180,24 @@ const resolvers: Resolvers = {
       // Run mutation.
       let data;
       try {
-        data = <Order>await client.request(mutation);
+        data = <OrderData>await client.request(mutation);
       } catch (errors) {
         throw new UserInputError("Invalid orderId");
       }
 
-      return data;
-    },
-    completeOrder: async (_: any, { orderId }) => {
-      // Get an instance of Apollo Client.
-      const client = getClient();
+      if (_.isEmpty(data.updateOrder.order))
+        throw new UserInputError("Cannot update order since orderId not found");
 
-      const patch = {
-        filter: {
-          orderId,
-        },
-        set: {
-          status: OrderStatus.Complete,
-        },
-      };
+      return data.updateOrder.order;
+    },
+    deleteOrder: async (_: any, { orderId }) => {
+      // Get an instance of GraphQL Client.
+      const client = getClient();
 
       // Create a mutation.
       const mutation = gql`
         mutation {
-          updateOrder(input: ${patch}) {
+          updateOrder(orderId: ${orderId}) {
             order {
               orderId
               status
@@ -192,12 +210,15 @@ const resolvers: Resolvers = {
       // Run mutation.
       let data;
       try {
-        data = <Order>await client.request(mutation);
+        data = <OrderData>await client.request(mutation);
       } catch (errors) {
         throw new UserInputError("Invalid orderId");
       }
 
-      return data;
+      if (_.isEmpty(data.deleteOrder.order))
+        throw new UserInputError("Cannot delete order since orderId not found");
+
+      return data.deleteOrder.order;
     },
   },
 };

@@ -23,20 +23,21 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  createOrder: Order;
-  cancelOrder: Order;
-  completeOrder: Order;
+  addOrder: Order;
+  updateOrder: Order;
+  deleteOrder: Order;
 };
 
-export type MutationCreateOrderArgs = {
+export type MutationAddOrderArgs = {
   data: OrderInput;
 };
 
-export type MutationCancelOrderArgs = {
+export type MutationUpdateOrderArgs = {
   orderId: Scalars["ID"];
+  data: OrderInput;
 };
 
-export type MutationCompleteOrderArgs = {
+export type MutationDeleteOrderArgs = {
   orderId: Scalars["ID"];
 };
 
@@ -48,6 +49,7 @@ export type Order = {
 };
 
 export type OrderInput = {
+  status: OrderStatus;
   ticketId: Scalars["ID"];
 };
 
@@ -94,6 +96,10 @@ export type GraphQLRecursivePick<T, S> = {
   [K in keyof T & keyof S]: ScalarCheck<T[K], S[K]>;
 };
 
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
@@ -108,6 +114,7 @@ export type StitchingResolver<TResult, TParent, TContext, TArgs> =
   | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
   | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -235,23 +242,23 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
 > = ResolversObject<{
-  createOrder?: Resolver<
+  addOrder?: Resolver<
     ResolversTypes["Order"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateOrderArgs, "data">
+    RequireFields<MutationAddOrderArgs, "data">
   >;
-  cancelOrder?: Resolver<
+  updateOrder?: Resolver<
     ResolversTypes["Order"],
     ParentType,
     ContextType,
-    RequireFields<MutationCancelOrderArgs, "orderId">
+    RequireFields<MutationUpdateOrderArgs, "orderId" | "data">
   >;
-  completeOrder?: Resolver<
+  deleteOrder?: Resolver<
     ResolversTypes["Order"],
     ParentType,
     ContextType,
-    RequireFields<MutationCompleteOrderArgs, "orderId">
+    RequireFields<MutationDeleteOrderArgs, "orderId">
   >;
 }>;
 

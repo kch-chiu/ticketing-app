@@ -2,10 +2,20 @@ import { Resolvers, Ticket } from "./types";
 import { graphQLClientWrapper } from "../GraphQLClientWrapper";
 import { UserInputError } from "apollo-server-express";
 import { GraphQLClient, gql } from "graphql-request";
+import _ from 'lodash';
 
 interface TicketData {
   getTicket: Ticket;
   allTickets: [Ticket];
+  addTicket: {
+    ticket: Ticket
+  }
+  updateTicket: {
+    ticket: Ticket
+  }
+  deleteTicket: {
+    ticket: Ticket
+  }
 }
 
 const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
@@ -13,7 +23,7 @@ const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.clien
 const resolvers: Resolvers = {
   Ticket: {
     __resolveReference: async ({ ticketId }) => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
@@ -35,18 +45,21 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
+      if (_.isEmpty(data.getTicket))
+        throw new UserInputError("Ticket cannot be found");
+
       return data.getTicket;
     },
   },
   Query: {
     allTickets: async () => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
       const query = gql`
         query {
-          allTickets: queryTicket(filter: { has: ticketId }) {
+          allTickets: queryTicket {
             ticketId
             title
             price
@@ -65,7 +78,7 @@ const resolvers: Resolvers = {
       return data.allTickets;
     },
     getTicket: async (_: any, { ticketId }) => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
@@ -87,16 +100,22 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
+      if (_.isEmpty(data.getTicket))
+        throw new UserInputError("Cannot find ticket");
+
       return data.getTicket;
     },
   },
   Mutation: {
-    createTicket: async (_: any, { data: inputData }) => {
-      // Get an instance of Apollo Client.
+    addTicket: async (_: any, { data: inputData }) => {
+      // Get an instance of GraphQL Client.
       const client = getClient();
 
-      const { price } = inputData;
+      const { title, price } = inputData;
 
+      if (_.isEmpty(title))
+        throw new UserInputError("Title can't be empty");
+        
       if (price <= 0)
         throw new UserInputError("Price must be greater than 0");
 
@@ -118,15 +137,15 @@ const resolvers: Resolvers = {
       // Run mutation.
       let data;
       try {
-        data = <Ticket>await client.request(mutation);
+        data = <TicketData>await client.request(mutation);
       } catch (error) {
-        throw new UserInputError("Title can't be empty");
+        throw new UserInputError("Cannot create ticket");
       }
 
-      return data;
+      return data.addTicket.ticket;
     },
     updateTicket: async (_: any, { ticketId, data: inputData }) => {
-      // Get an instance of Apollo Client.
+      // Get an instance of GrahpQL Client.
       const client = getClient();
 
       const { price } = inputData;
@@ -159,13 +178,46 @@ const resolvers: Resolvers = {
       // Run mutation.
       let data;
       try {
-        data = <Ticket>await client.request(mutation);
+        data = <TicketData>await client.request(mutation);
       } catch (errors) {
         throw new UserInputError("Invalid ticketId");
       }
 
-      return data;
+      if (_.isEmpty(data.updateTicket.ticket))
+        throw new UserInputError("Cannot update ticket since ticketId not found");
+
+      return data.updateTicket.ticket;
     },
+    deleteTicket: async (_: any, { ticketId }) => {
+      // Get an instance of GraphQL Client
+      const client = getClient();
+
+      // Create a mutation.
+      const mutation = gql`
+        mutation {
+          deleteTicket(ticketId: ${ticketId}) {
+            ticket {
+              ticketId
+              title
+              price
+            }
+          }
+        }
+      `;
+
+      // Run mutation.
+      let data;
+      try {
+        data = <TicketData>await client.request(mutation);
+      } catch (errors) {
+        throw new UserInputError("Invalid ticketId");
+      }
+
+      if (_.isEmpty(data.deleteTicket.ticket))
+        throw new UserInputError("Cannot delete ticket since ticketId not found");
+
+      return data.deleteTicket.ticket;
+    }
   },
 };
 

@@ -21,11 +21,24 @@ export type Scalars = {
   _FieldSet: any;
 };
 
-export type Ticket = {
-  __typename?: "Ticket";
+export type Mutation = {
+  __typename?: "Mutation";
+  addTicket: Ticket;
+  updateTicket: Ticket;
+  deleteTicket: Ticket;
+};
+
+export type MutationAddTicketArgs = {
+  data: TicketInput;
+};
+
+export type MutationUpdateTicketArgs = {
   ticketId: Scalars["ID"];
-  title: Scalars["String"];
-  price: Scalars["Float"];
+  data: TicketInput;
+};
+
+export type MutationDeleteTicketArgs = {
+  ticketId: Scalars["ID"];
 };
 
 export type Query = {
@@ -38,24 +51,16 @@ export type QueryGetTicketArgs = {
   ticketId: Scalars["ID"];
 };
 
-export type TicketInput = {
+export type Ticket = {
+  __typename?: "Ticket";
+  ticketId: Scalars["ID"];
   title: Scalars["String"];
   price: Scalars["Float"];
 };
 
-export type Mutation = {
-  __typename?: "Mutation";
-  createTicket: Ticket;
-  updateTicket: Ticket;
-};
-
-export type MutationCreateTicketArgs = {
-  data: TicketInput;
-};
-
-export type MutationUpdateTicketArgs = {
-  ticketId: Scalars["ID"];
-  data: TicketInput;
+export type TicketInput = {
+  title: Scalars["String"];
+  price: Scalars["Float"];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -80,6 +85,10 @@ export type GraphQLRecursivePick<T, S> = {
   [K in keyof T & keyof S]: ScalarCheck<T[K], S[K]>;
 };
 
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
@@ -94,6 +103,7 @@ export type StitchingResolver<TResult, TParent, TContext, TArgs> =
   | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
   | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -194,26 +204,67 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Ticket: ResolverTypeWrapper<Ticket>;
+  Mutation: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
+  Query: ResolverTypeWrapper<{}>;
+  Ticket: ResolverTypeWrapper<Ticket>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
-  Query: ResolverTypeWrapper<{}>;
   TicketInput: TicketInput;
-  Mutation: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Ticket: Ticket;
+  Mutation: {};
   ID: Scalars["ID"];
+  Query: {};
+  Ticket: Ticket;
   String: Scalars["String"];
   Float: Scalars["Float"];
-  Query: {};
   TicketInput: TicketInput;
-  Mutation: {};
   Boolean: Scalars["Boolean"];
+}>;
+
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
+> = ResolversObject<{
+  addTicket?: Resolver<
+    ResolversTypes["Ticket"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddTicketArgs, "data">
+  >;
+  updateTicket?: Resolver<
+    ResolversTypes["Ticket"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateTicketArgs, "ticketId" | "data">
+  >;
+  deleteTicket?: Resolver<
+    ResolversTypes["Ticket"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteTicketArgs, "ticketId">
+  >;
+}>;
+
+export type QueryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
+> = ResolversObject<{
+  allTickets?: Resolver<
+    Array<Maybe<ResolversTypes["Ticket"]>>,
+    ParentType,
+    ContextType
+  >;
+  getTicket?: Resolver<
+    ResolversTypes["Ticket"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetTicketArgs, "ticketId">
+  >;
 }>;
 
 export type TicketResolvers<
@@ -234,45 +285,10 @@ export type TicketResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type QueryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
-> = ResolversObject<{
-  allTickets?: Resolver<
-    Array<Maybe<ResolversTypes["Ticket"]>>,
-    ParentType,
-    ContextType
-  >;
-  getTicket?: Resolver<
-    ResolversTypes["Ticket"],
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetTicketArgs, "ticketId">
-  >;
-}>;
-
-export type MutationResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
-> = ResolversObject<{
-  createTicket?: Resolver<
-    ResolversTypes["Ticket"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateTicketArgs, "data">
-  >;
-  updateTicket?: Resolver<
-    ResolversTypes["Ticket"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateTicketArgs, "ticketId" | "data">
-  >;
-}>;
-
 export type Resolvers<ContextType = any> = ResolversObject<{
-  Ticket?: TicketResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  Ticket?: TicketResolvers<ContextType>;
 }>;
 
 /**

@@ -115,15 +115,15 @@ const resolvers: Resolvers = {
       // Get an instance of GraphQL Client.
       const client = getClient();
 
-      const addition = {
-        ...inputData,
-        status: OrderStatus.Created,
-      };
+      const { status } = inputData;
+
+      if (_.includes(Object.values(OrderStatus), status) === false)
+        throw new UserInputError("Status is not a valid status");
 
       // Create a mutation.
       const mutation = gql`
         mutation {
-          addOrder(input: ${addition}) {
+          addOrder(input: ${inputData}) {
             order {
               orderId
               status
@@ -152,7 +152,7 @@ const resolvers: Resolvers = {
 
       const { status } = inputData;
 
-      if (Object.values(OrderStatus).includes(status) === false)
+      if (_.includes(Object.values(OrderStatus), status) === false)
         throw new UserInputError("Status is not a valid status");
 
       const patch = {

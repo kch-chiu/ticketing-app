@@ -119,12 +119,10 @@ const resolvers: Resolvers = {
       if (price <= 0)
         throw new UserInputError("Price must be greater than 0");
 
-      const addition = inputData;
-
       // Create a mutation.
       const mutation = gql`
         mutation {
-          addTicket(input: ${addition}) {
+          addTicket(input: ${inputData}) {
             ticket {
               ticketId
               title

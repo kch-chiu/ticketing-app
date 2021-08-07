@@ -1,4 +1,4 @@
-name: tickets-depl
+name: tickets
 image: okteto/node:12
 command: bash
 sync:

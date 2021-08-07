@@ -1,4 +1,4 @@
-name: payments-depl
+name: payments
 image: okteto/node:12
 command: bash
 sync:

@@ -31,7 +31,7 @@ jobs:
           npx -p @apollo/rover \
             rover subgraph publish ticketing-gateway-dgraph-ex1l5e \
             --routing-url http://dgraph-srv:8080/graphql \
-            --schema dgraph/schema.graphql \
+            --schema dgraph/input-schema.graphql \
             --name dgraph \
             --convert
 

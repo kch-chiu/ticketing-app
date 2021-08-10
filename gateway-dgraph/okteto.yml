@@ -1,5 +1,4 @@
-name: gateway-depl
-image: okteto/node:12
+name: gateway-dgraph
 command: bash
 sync:
 - .:/usr/src/app

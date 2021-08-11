@@ -18,7 +18,6 @@ app.use(cors());
 
 server.applyMiddleware({
   app,
-  path: "/api/gateway/graphql",
 });
 
 app.all("*", (_: any, __: any) => {

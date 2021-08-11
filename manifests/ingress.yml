@@ -9,13 +9,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /api/gateway
-            pathType: Prefix
-            backend:
-              service:
-                name: gateway-srv
-                port:
-                  number: 4000
           - path: /
             pathType: Prefix
             backend:

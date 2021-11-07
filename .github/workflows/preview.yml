@@ -19,9 +19,6 @@ jobs:
         with:
           namespace: kch-chiu
 
-      - name: Test Environment Variable
-        run: echo GITHUB_WORKFLOW is $GITHUB_WORKFLOW
-
       - name: Trigger the pipeline
         uses: okteto/pipeline@master
         with:

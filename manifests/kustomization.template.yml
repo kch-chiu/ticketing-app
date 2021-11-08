@@ -21,12 +21,12 @@ configMapGenerator:
       - client-stripe-pub=pk_test_51FTiiHFzQH4GYdNSelC82u5p5X10AOC8sglP6ePVWcCy4v376diHYPDPvay5Y5M6m7qCqXOHRKwsjTpaL1baKbhB00VwJrOImM
   - name: gateway-config
     literals:
-      - apollo-uplink-url=https://uplink.api.apollographql.com/
+      - apollo-graph-ref=ticketing-gateway@current
       - node-env=production
       - gateway-dgraph-url=http://gateway-srv:4000/graphql
   - name: gateway-dgraph-config
     literals:
-      - apollo-uplink-url=https://uplink.api.apollographql.com/
+      - apollo-graph-ref=ticketing-gateway-dgraph-ex1l5e@current
       - node-env=production
       - gateway-dgraph-url=http://gateway-dgraph-srv:5000/graphql
   - name: dgraph-config
@@ -43,12 +43,12 @@ secretGenerator:
   - name: stripe-key
     literals:
       - stripe-key=$STRIPE_KEY
-  - name: ticketing-gateway-dgraph-key
-    literals:
-      - ticketing-gateway-dgraph-key=$TICKETING_GATEWAY_DGRAPH_KEY
   - name: ticketing-gateway-key
     literals:
       - ticketing-gateway-key=$TICKETING_GATEWAY_KEY
+  - name: ticketing-gateway-dgraph-key
+    literals:
+      - ticketing-gateway-dgraph-key=$TICKETING_GATEWAY_DGRAPH_KEY
 
 generatorOptions:
   disableNameSuffixHash: true

@@ -21,11 +21,11 @@ spec:
                 secretKeyRef:
                   name: ticketing-gateway-key
                   key: ticketing-gateway-key
-            - name: APOLLO_SCHEMA_CONFIG_DELIVERY_ENDPOINT
+            - name: APOLLO_GRAPH_REF
               valueFrom:
                 configMapKeyRef:
                   name: gateway-config
-                  key: apollo-uplink-url
+                  key: apollo-graph-ref
             - name: NODE_ENV
               valueFrom:
                 configMapKeyRef:

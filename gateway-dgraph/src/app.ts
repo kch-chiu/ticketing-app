@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Express } from "express";
 import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloGateway } from "@apollo/gateway";
@@ -7,23 +7,22 @@ import { errorHandler, NotFoundError } from "@kch-chiu/common";
 
 const app = express();
 
-const gateway = new ApolloGateway();
+const startApolloServer = (app: Express) => {
+  const gateway = new ApolloGateway();
 
-const server = new ApolloServer({
-  gateway,
-  subscriptions: false,
-});
+  const server = new ApolloServer({ gateway });
 
-app.use(cors());
+  app.use(cors());
 
-server.applyMiddleware({
-  app,
-});
+  server.applyMiddleware({ app });
 
-app.all("*", (_: any, __: any) => {
-  throw new NotFoundError();
-});
+  app.all("*", (_: any, __: any) => {
+    throw new NotFoundError();
+  });
 
-app.use(errorHandler);
+  app.use(errorHandler);
+}
+
+startApolloServer(app);
 
 export { app };

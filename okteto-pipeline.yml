@@ -13,4 +13,3 @@ deploy:
   - okteto build -t okteto.dev/gateway:$OKTETO_GIT_COMMIT gateway
   - cd manifests; kustomize edit set image okteto/gateway:buildTag=okteto.dev/gateway:$OKTETO_GIT_COMMIT
   - kustomize build manifests | kubectl apply -f -
-  - sleep 1m

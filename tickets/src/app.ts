@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildFederatedSchema } from "@apollo/federation";
+import { buildSubgraphSchema } from "@apollo/federation";
 import "graphql-import-node";
 import * as typeDefs from "../src/graphql/schema.graphql";
 import resolvers from "../src/graphql/resolvers";
@@ -10,7 +10,7 @@ import { DocumentNode } from 'graphql';
 const app = express();
 
 const startApolloServer = async (app: Express, typeDefs: DocumentNode, resolvers: Resolvers) => {
-  const schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+  const schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
 
   const server = new ApolloServer({ schema });
 

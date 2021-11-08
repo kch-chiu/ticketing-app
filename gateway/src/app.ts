@@ -7,10 +7,12 @@ import { errorHandler, NotFoundError } from "@kch-chiu/common";
 
 const app = express();
 
-const startApolloServer = (app: Express) => {
+const startApolloServer = async (app: Express) => {
   const gateway = new ApolloGateway();
 
   const server = new ApolloServer({ gateway });
+
+  await server.start();
 
   app.use(cors());
 

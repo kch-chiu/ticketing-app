@@ -15,7 +15,7 @@ type Order @key(fields: "orderId") {
 }
 
 extend type Query {
-  allOrders: [Order!]!
+  getAllOrders: [Order!]!
   getOrder(orderId: ID!): Order!
 }
 

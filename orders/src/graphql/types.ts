@@ -3,14 +3,15 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
-} &
-  { [P in K]-?: NonNullable<T[P]> };
+} & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -24,20 +25,20 @@ export type Scalars = {
 export type Mutation = {
   __typename?: "Mutation";
   addOrder: Order;
-  updateOrder: Order;
   deleteOrder: Order;
+  updateOrder: Order;
 };
 
 export type MutationAddOrderArgs = {
   data: OrderInput;
 };
 
-export type MutationUpdateOrderArgs = {
+export type MutationDeleteOrderArgs = {
   orderId: Scalars["ID"];
-  data: OrderInput;
 };
 
-export type MutationDeleteOrderArgs = {
+export type MutationUpdateOrderArgs = {
+  data: OrderInput;
   orderId: Scalars["ID"];
 };
 
@@ -54,14 +55,14 @@ export type OrderInput = {
 };
 
 export enum OrderStatus {
-  Created = "CREATED",
   Cancelled = "CANCELLED",
   Complete = "COMPLETE",
+  Created = "CREATED",
 }
 
 export type Query = {
   __typename?: "Query";
-  allOrders: Array<Order>;
+  getAllOrders: Array<Order>;
   getOrder: Order;
 };
 
@@ -99,23 +100,9 @@ export type GraphQLRecursivePick<T, S> = {
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type StitchingResolver<TResult, TParent, TContext, TArgs> =
-  | LegacyStitchingResolver<TResult, TParent, TContext, TArgs>
-  | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
-  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>;
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -248,17 +235,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAddOrderArgs, "data">
   >;
-  updateOrder?: Resolver<
-    ResolversTypes["Order"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateOrderArgs, "orderId" | "data">
-  >;
   deleteOrder?: Resolver<
     ResolversTypes["Order"],
     ParentType,
     ContextType,
     RequireFields<MutationDeleteOrderArgs, "orderId">
+  >;
+  updateOrder?: Resolver<
+    ResolversTypes["Order"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateOrderArgs, "data" | "orderId">
   >;
 }>;
 
@@ -284,7 +271,11 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = ResolversObject<{
-  allOrders?: Resolver<Array<ResolversTypes["Order"]>, ParentType, ContextType>;
+  getAllOrders?: Resolver<
+    Array<ResolversTypes["Order"]>,
+    ParentType,
+    ContextType
+  >;
   getOrder?: Resolver<
     ResolversTypes["Order"],
     ParentType,
@@ -315,9 +306,3 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Ticket?: TicketResolvers<ContextType>;
 }>;
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;

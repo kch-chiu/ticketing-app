@@ -28,8 +28,8 @@ const resolvers: Resolvers = {
 
       // Create a query.
       const query = gql`
-        query {
-          getOrder(orderId: ${orderId}) {
+        query getOrder {
+          order: getOrder(orderId: ${orderId}) {
             orderId
             status
             ticket
@@ -56,13 +56,13 @@ const resolvers: Resolvers = {
     },
   },
   Query: {
-    allOrders: async () => {
+    getAllOrders: async () => {
       // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
       const query = gql`
-        query {
+        query getAllOrders {
           allOrders: queryOrder {
             orderId
             status
@@ -87,8 +87,8 @@ const resolvers: Resolvers = {
 
       // Create a query.
       const query = gql`
-        query {
-          getOrder(orderId: ${orderId}) {
+        query getOrder {
+          order: getOrder(orderId: ${orderId}) {
             orderId
             status
             ticket
@@ -122,8 +122,8 @@ const resolvers: Resolvers = {
 
       // Create a mutation.
       const mutation = gql`
-        mutation {
-          addOrder(input: ${inputData}) {
+        mutation addOrder {
+          addOrderPayload: addOrder(input: ${inputData}) {
             order {
               orderId
               status
@@ -166,8 +166,8 @@ const resolvers: Resolvers = {
 
       // Create a mutation.
       const mutation = gql`
-        mutation {
-          updateOrder(input: ${patch}) {
+        mutation updateOrder {
+          updateOrderPayload: updateOrder(input: ${patch}) {
             order {
               orderId
               status
@@ -196,8 +196,8 @@ const resolvers: Resolvers = {
 
       // Create a mutation.
       const mutation = gql`
-        mutation {
-          updateOrder(orderId: ${orderId}) {
+        mutation deleteOrder {
+          deleteOrderPayload: deleteOrder(orderId: ${orderId}) {
             order {
               orderId
               status

@@ -28,8 +28,8 @@ const resolvers: Resolvers = {
 
       // Create a query.
       const query = gql`
-        query {
-          getTicket(ticketId: ${ticketId}) {
+        query getTicket {
+          ticket: getTicket(ticketId: ${ticketId}) {
             ticketId
             title
             price
@@ -52,13 +52,13 @@ const resolvers: Resolvers = {
     },
   },
   Query: {
-    allTickets: async () => {
+    getAllTickets: async () => {
       // Get an instance of GraphQL Client.
       const client = getClient();
 
       // Create a query.
       const query = gql`
-        query {
+        query getAllTickets {
           allTickets: queryTicket {
             ticketId
             title
@@ -83,8 +83,8 @@ const resolvers: Resolvers = {
 
       // Create a query.
       const query = gql`
-        query {
-          getTicket(ticketId: ${ticketId}) {
+        query getTicket {
+          ticket: getTicket(ticketId: ${ticketId}) {
             ticketId
             title
             price
@@ -121,8 +121,8 @@ const resolvers: Resolvers = {
 
       // Create a mutation.
       const mutation = gql`
-        mutation {
-          addTicket(input: ${inputData}) {
+        mutation addTicket {
+          addTicketPayload: addTicket(input: ${inputData}) {
             ticket {
               ticketId
               title
@@ -162,8 +162,8 @@ const resolvers: Resolvers = {
 
       // Create a mutation.
       const mutation = gql`
-        mutation {
-          updateTicket(input: ${patch}) {
+        mutation updateTicket{
+          updateTicketPayload: updateTicket(input: ${patch}) {
             ticket {
               ticketId
               title
@@ -192,8 +192,8 @@ const resolvers: Resolvers = {
 
       // Create a mutation.
       const mutation = gql`
-        mutation {
-          deleteTicket(ticketId: ${ticketId}) {
+        mutation deleteTicket {
+          deleteTicketPayload: deleteTicket(ticketId: ${ticketId}) {
             ticket {
               ticketId
               title

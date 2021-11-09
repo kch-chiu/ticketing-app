@@ -23,13 +23,13 @@ const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.clien
 const resolvers: Resolvers = {
   Order: {
     __resolveReference: async ({ orderId }) => {
-      // Get an instance of GraphQL Client.
+      // Get an instance of GraphQL Client
       const client = getClient();
 
-      // Create a query.
+      // Create a query
       const query = gql`
-        query getOrder {
-          order: getOrder(orderId: ${orderId}) {
+        query getOrder($orderId: ID!) {
+          order: getOrder(orderId: $orderId) {
             orderId
             status
             ticket
@@ -37,10 +37,15 @@ const resolvers: Resolvers = {
         }
       `;
 
-      // Run query and get order.
+      // Create variables for query
+      const variables = {
+        orderId
+      };
+
+      // Run query and get order
       let data;
       try {
-        data = <OrderData>await client.request(query);
+        data = <OrderData>await client.request(query, variables);
       } catch (error) {
         throw new UserInputError("Invalid orderId");
       }
@@ -57,10 +62,10 @@ const resolvers: Resolvers = {
   },
   Query: {
     getAllOrders: async () => {
-      // Get an instance of GraphQL Client.
+      // Get an instance of GraphQL Client
       const client = getClient();
 
-      // Create a query.
+      // Create a query
       const query = gql`
         query getAllOrders {
           allOrders: queryOrder {
@@ -71,7 +76,7 @@ const resolvers: Resolvers = {
         }
       `;
 
-      // Run query and get all orders.
+      // Run query and get all orders
       let data;
       try {
         data = <OrderData>await client.request(query);
@@ -82,13 +87,13 @@ const resolvers: Resolvers = {
       return data.allOrders;
     },
     getOrder: async (_: any, { orderId }) => {
-      // Get an instance of GraphQL Client.
+      // Get an instance of GraphQL Client
       const client = getClient();
 
-      // Create a query.
+      // Create a query
       const query = gql`
-        query getOrder {
-          order: getOrder(orderId: ${orderId}) {
+        query getOrder($orderId: ID!) {
+          order: getOrder(orderId: $orderId) {
             orderId
             status
             ticket
@@ -96,10 +101,15 @@ const resolvers: Resolvers = {
         }
       `;
 
-      // Run query and get order.
+      // Create variables for query
+      const variables = {
+        orderId
+      };
+
+      // Run query and get order
       let data;
       try {
-        data = <OrderData>await client.request(query);
+        data = <OrderData>await client.request(query, variables);
       } catch (error) {
         throw new UserInputError("Invalid orderId");
       }
@@ -120,10 +130,10 @@ const resolvers: Resolvers = {
       if (_.includes(OrderStatus, status) === false)
         throw new UserInputError("Status is not a valid status");
 
-      // Create a mutation.
+      // Create a mutation
       const mutation = gql`
-        mutation addOrder {
-          addOrderPayload: addOrder(input: ${inputData}) {
+        mutation addOrder($addOrderInput: [AddOrderInput!]!) {
+          addOrderPayload: addOrder(input: $addOrderInput) {
             order {
               orderId
               status
@@ -133,10 +143,19 @@ const resolvers: Resolvers = {
         }
       `;
 
-      // Run mutation.
+      // Create variables for mutation
+      const variables = {
+        addOrderInput: [
+          {
+            ...inputData
+          }
+        ]
+      };
+
+      // Run mutation
       let data;
       try {
-        data = <OrderData>await client.request(mutation);
+        data = <OrderData>await client.request(mutation, variables);
       } catch (error) {
         throw new UserInputError("Invalid tickedId");
       }
@@ -147,7 +166,7 @@ const resolvers: Resolvers = {
       return data.addOrder.order;
     },
     updateOrder: async (_: any, { orderId, data: inputData }) => {
-      // Get an instance of GraphQL Client.
+      // Get an instance of GraphQL Client
       const client = getClient();
 
       const { status } = inputData;
@@ -155,19 +174,10 @@ const resolvers: Resolvers = {
       if (_.includes(OrderStatus, status) === false)
         throw new UserInputError("Status is not a valid status");
 
-      const patch = {
-        filter: {
-          orderId,
-        },
-        set: {
-          ...inputData,
-        },
-      };
-
-      // Create a mutation.
+      // Create a mutation
       const mutation = gql`
-        mutation updateOrder {
-          updateOrderPayload: updateOrder(input: ${patch}) {
+        mutation updateOrder($updateOrderInput: UpdateOrderInput!) {
+          updateOrderPayload: updateOrder(input: $updateOrderInput) {
             order {
               orderId
               status
@@ -177,10 +187,22 @@ const resolvers: Resolvers = {
         }
       `;
 
-      // Run mutation.
+      // Create variables for mutation
+      const variables = {
+        updateOrderInput: {
+          filter: {
+            orderId
+          },
+          set: {
+            ...inputData
+          }
+        }
+      }
+
+      // Run mutation
       let data;
       try {
-        data = <OrderData>await client.request(mutation);
+        data = <OrderData>await client.request(mutation, variables);
       } catch (errors) {
         throw new UserInputError("Invalid orderId");
       }
@@ -191,13 +213,13 @@ const resolvers: Resolvers = {
       return data.updateOrder.order;
     },
     deleteOrder: async (_: any, { orderId }) => {
-      // Get an instance of GraphQL Client.
+      // Get an instance of GraphQL Client
       const client = getClient();
 
-      // Create a mutation.
+      // Create a mutation
       const mutation = gql`
-        mutation deleteOrder {
-          deleteOrderPayload: deleteOrder(orderId: ${orderId}) {
+        mutation deleteOrder($deleteOrderFilter: OrderFilter!) {
+          deleteOrderPayload: deleteOrder(filter: $deleteOrderFilter) {
             order {
               orderId
               status
@@ -207,10 +229,17 @@ const resolvers: Resolvers = {
         }
       `;
 
-      // Run mutation.
+      // Create variables for mutation
+      const variables = {
+        deleteOrderFilter: {
+          orderId
+        }
+      }
+
+      // Run mutation
       let data;
       try {
-        data = <OrderData>await client.request(mutation);
+        data = <OrderData>await client.request(mutation, variables);
       } catch (errors) {
         throw new UserInputError("Invalid orderId");
       }

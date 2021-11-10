@@ -5,15 +5,15 @@ import { GraphQLClient, gql } from "graphql-request";
 import _ from 'lodash';
 
 interface TicketData {
-  getTicket: Ticket;
+  ticket: Ticket;
   allTickets: [Ticket];
-  addTicket: {
+  addTicketPayload: {
     ticket: Ticket
   }
-  updateTicket: {
+  updateTicketPayload: {
     ticket: Ticket
   }
-  deleteTicket: {
+  deleteTicketPayload: {
     ticket: Ticket
   }
 }
@@ -50,10 +50,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.getTicket))
+      if (_.isEmpty(data.ticket))
         throw new UserInputError("Ticket cannot be found");
 
-      return data.getTicket;
+      return data.ticket;
     },
   },
   Query: {
@@ -110,10 +110,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.getTicket))
+      if (_.isEmpty(data.ticket))
         throw new UserInputError("Cannot find ticket");
 
-      return data.getTicket;
+      return data.ticket;
     },
   },
   Mutation: {
@@ -159,7 +159,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Cannot create ticket");
       }
 
-      return data.addTicket.ticket;
+      return data.addTicketPayload.ticket;
     },
     updateTicket: async (_: any, { ticketId, data: inputData }) => {
       // Get an instance of GrahpQL Client.
@@ -203,10 +203,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.updateTicket.ticket))
+      if (_.isEmpty(data.updateTicketPayload.ticket))
         throw new UserInputError("Cannot update ticket since ticketId not found");
 
-      return data.updateTicket.ticket;
+      return data.updateTicketPayload.ticket;
     },
     deleteTicket: async (_: any, { ticketId }) => {
       // Get an instance of GraphQL Client
@@ -240,10 +240,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.deleteTicket.ticket))
+      if (_.isEmpty(data.deleteTicketPayload.ticket))
         throw new UserInputError("Cannot delete ticket since ticketId not found");
 
-      return data.deleteTicket.ticket;
+      return data.deleteTicketPayload.ticket;
     }
   },
 };

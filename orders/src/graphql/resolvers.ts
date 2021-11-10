@@ -5,15 +5,15 @@ import { GraphQLClient, gql } from "graphql-request";
 import _ from 'lodash';
 
 interface OrderData {
-  getOrder: Order;
+  order: Order;
   allOrders: [Order];
-  addOrder: {
+  addOrderPayload: {
     order: Order
   }
-  updateOrder: {
+  updateOrderPayload: {
     order: Order
   }
-  deleteOrder: {
+  deleteOrderPayload: {
     order: Order
   }
 }
@@ -50,10 +50,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.getOrder))
+      if (_.isEmpty(data.order))
         throw new UserInputError("Order cannot be found");
 
-      return data.getOrder;
+      return data.order;
     },
     //@ts-ignore
     ticket: ({ ticket }: any) => {
@@ -114,10 +114,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.getOrder))
+      if (_.isEmpty(data.order))
         throw new UserInputError("Cannot find order")
 
-      return data.getOrder;
+      return data.order;
     },
   },
   Mutation: {
@@ -160,10 +160,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid tickedId");
       }
 
-      if (_.isEmpty(data.addOrder.order.ticket))
+      if (_.isEmpty(data.addOrderPayload.order.ticket))
         throw new UserInputError("Cannot create order since ticketId not found");
 
-      return data.addOrder.order;
+      return data.addOrderPayload.order;
     },
     updateOrder: async (_: any, { orderId, data: inputData }) => {
       // Get an instance of GraphQL Client
@@ -207,10 +207,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.updateOrder.order))
+      if (_.isEmpty(data.updateOrderPayload.order))
         throw new UserInputError("Cannot update order since orderId not found");
 
-      return data.updateOrder.order;
+      return data.updateOrderPayload.order;
     },
     deleteOrder: async (_: any, { orderId }) => {
       // Get an instance of GraphQL Client
@@ -244,10 +244,10 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.deleteOrder.order))
+      if (_.isEmpty(data.deleteOrderPayload.order))
         throw new UserInputError("Cannot delete order since orderId not found");
 
-      return data.deleteOrder.order;
+      return data.deleteOrderPayload.order;
     },
   },
 };

@@ -2,7 +2,6 @@ import { Resolvers, OrderStatus, Order } from "./types";
 import { graphQLClientWrapper } from "../GraphQLClientWrapper";
 import { UserInputError } from "apollo-server-express";
 import { GraphQLClient, gql } from "graphql-request";
-import _ from 'lodash';
 
 interface OrderData {
   order: Order;
@@ -50,7 +49,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.order))
+      if (!data.order)
         throw new UserInputError("Order cannot be found");
 
       return data.order;
@@ -114,7 +113,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.order))
+      if (!data.order)
         throw new UserInputError("Cannot find order")
 
       return data.order;
@@ -127,7 +126,7 @@ const resolvers: Resolvers = {
 
       const { status } = inputData;
 
-      if (_.includes(OrderStatus, status) === false)
+      if (!Object.values(OrderStatus).includes(status))
         throw new UserInputError("Status is not a valid status");
 
       // Create a mutation
@@ -160,9 +159,6 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid tickedId");
       }
 
-      if (_.isEmpty(data.addOrderPayload.order.ticket))
-        throw new UserInputError("Cannot create order since ticketId not found");
-
       return data.addOrderPayload.order;
     },
     updateOrder: async (_: any, { orderId, data: inputData }) => {
@@ -171,7 +167,7 @@ const resolvers: Resolvers = {
 
       const { status } = inputData;
 
-      if (_.includes(OrderStatus, status) === false)
+      if (!Object.values(OrderStatus).includes(status))
         throw new UserInputError("Status is not a valid status");
 
       // Create a mutation
@@ -207,7 +203,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.updateOrderPayload.order))
+      if (!data.updateOrderPayload.order)
         throw new UserInputError("Cannot update order since orderId not found");
 
       return data.updateOrderPayload.order;
@@ -244,7 +240,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (_.isEmpty(data.deleteOrderPayload.order))
+      if (!data.deleteOrderPayload.order)
         throw new UserInputError("Cannot delete order since orderId not found");
 
       return data.deleteOrderPayload.order;

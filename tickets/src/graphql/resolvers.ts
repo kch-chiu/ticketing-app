@@ -2,7 +2,6 @@ import { Resolvers, Ticket } from "./types";
 import { graphQLClientWrapper } from "../GraphQLClientWrapper";
 import { UserInputError } from "apollo-server-express";
 import { GraphQLClient, gql } from "graphql-request";
-import _ from 'lodash';
 
 interface TicketData {
   ticket: Ticket;
@@ -50,7 +49,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.ticket))
+      if (!data.ticket)
         throw new UserInputError("Ticket cannot be found");
 
       return data.ticket;
@@ -110,7 +109,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.ticket))
+      if (!data.ticket)
         throw new UserInputError("Cannot find ticket");
 
       return data.ticket;
@@ -123,7 +122,7 @@ const resolvers: Resolvers = {
 
       const { title, price } = inputData;
 
-      if (_.isEmpty(title))
+      if (!title)
         throw new UserInputError("Title can't be empty");
         
       if (price <= 0)
@@ -203,7 +202,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.updateTicketPayload.ticket))
+      if (!data.updateTicketPayload.ticket)
         throw new UserInputError("Cannot update ticket since ticketId not found");
 
       return data.updateTicketPayload.ticket;
@@ -240,7 +239,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (_.isEmpty(data.deleteTicketPayload.ticket))
+      if (!data.deleteTicketPayload.ticket)
         throw new UserInputError("Cannot delete ticket since ticketId not found");
 
       return data.deleteTicketPayload.ticket;

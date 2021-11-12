@@ -143,9 +143,10 @@ const resolvers: Resolvers = {
 
       // Create variables for mutation
       const variables = {
-        addTicketInput: [
+        "addTicketInput": [
           {
-            ...inputData
+            title,
+            price
           }
         ]
       };
@@ -164,7 +165,7 @@ const resolvers: Resolvers = {
       // Get an instance of GrahpQL Client.
       const client = getClient();
 
-      const { price } = inputData;
+      const { title, price } = inputData;
 
       if (price <= 0)
         throw new UserInputError("Price must be greater than zero");
@@ -184,12 +185,13 @@ const resolvers: Resolvers = {
 
       // Define variables for mutation
       const variables = {
-        updateTicketInput: {
-          filter: {
+        "updateTicketInput": {
+          "filter": {
             ticketId
           },
-          set: {
-            ...inputData
+          "set": {
+            title,
+            price
           }
         }
       };
@@ -226,7 +228,7 @@ const resolvers: Resolvers = {
 
       // Define variables for mutation
       const variables = {
-        deleteTicketFilter: {
+        "deleteTicketFilter": {
           ticketId
         }
       };

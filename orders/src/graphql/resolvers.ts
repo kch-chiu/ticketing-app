@@ -124,7 +124,7 @@ const resolvers: Resolvers = {
       // Get an instance of GraphQL Client.
       const client = getClient();
 
-      const { status } = inputData;
+      const { status, ticketId } = inputData;
 
       if (!Object.values(OrderStatus).includes(status))
         throw new UserInputError("Status is not a valid status");
@@ -136,7 +136,9 @@ const resolvers: Resolvers = {
             order {
               orderId
               status
-              ticket
+              ticket {
+                ticketId
+              }
             }
           }
         }
@@ -144,9 +146,12 @@ const resolvers: Resolvers = {
 
       // Create variables for mutation
       const variables = {
-        addOrderInput: [
+        "addOrderInput": [
           {
-            ...inputData
+            status,
+            "ticket": {
+              ticketId
+            }
           }
         ]
       };
@@ -177,7 +182,9 @@ const resolvers: Resolvers = {
             order {
               orderId
               status
-              ticket
+              ticket {
+                ticketId
+              }
             }
           }
         }
@@ -185,12 +192,12 @@ const resolvers: Resolvers = {
 
       // Create variables for mutation
       const variables = {
-        updateOrderInput: {
-          filter: {
+        "updateOrderInput": {
+          "filter": {
             orderId
           },
-          set: {
-            ...inputData
+          "set": {
+            status
           }
         }
       }
@@ -219,7 +226,9 @@ const resolvers: Resolvers = {
             order {
               orderId
               status
-              ticket
+              ticket {
+                ticketId
+              }
             }
           }
         }
@@ -227,7 +236,7 @@ const resolvers: Resolvers = {
 
       // Create variables for mutation
       const variables = {
-        deleteOrderFilter: {
+        "deleteOrderFilter": {
           orderId
         }
       }

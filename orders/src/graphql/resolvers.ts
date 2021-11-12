@@ -70,7 +70,9 @@ const resolvers: Resolvers = {
           allOrders: queryOrder {
             orderId
             status
-            ticket
+            ticket {
+              ticketId
+            }
           }
         }
       `;
@@ -95,7 +97,9 @@ const resolvers: Resolvers = {
           order: getOrder(orderId: $orderId) {
             orderId
             status
-            ticket
+            ticket {
+              ticketId
+            }
           }
         }
       `;

@@ -7,13 +7,13 @@ interface OrderData {
   order: Order;
   allOrders: [Order];
   addOrderPayload: {
-    order: Order
+    order: [Order]
   }
   updateOrderPayload: {
-    order: Order
+    order: [Order]
   }
   deleteOrderPayload: {
-    order: Order
+    order: [Order]
   }
 }
 
@@ -164,7 +164,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid tickedId");
       }
 
-      return data.addOrderPayload.order;
+      return data.addOrderPayload.order[0];
     },
     updateOrder: async (_: any, { orderId, data: inputData }) => {
       // Get an instance of GraphQL Client
@@ -213,7 +213,7 @@ const resolvers: Resolvers = {
       if (!data.updateOrderPayload.order)
         throw new UserInputError("Cannot update order since orderId not found");
 
-      return data.updateOrderPayload.order;
+      return data.updateOrderPayload.order[0];
     },
     deleteOrder: async (_: any, { orderId }) => {
       // Get an instance of GraphQL Client
@@ -252,7 +252,7 @@ const resolvers: Resolvers = {
       if (!data.deleteOrderPayload.order)
         throw new UserInputError("Cannot delete order since orderId not found");
 
-      return data.deleteOrderPayload.order;
+      return data.deleteOrderPayload.order[0];
     },
   },
 };

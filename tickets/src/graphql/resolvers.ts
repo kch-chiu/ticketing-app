@@ -7,13 +7,13 @@ interface TicketData {
   ticket: Ticket;
   allTickets: [Ticket];
   addTicketPayload: {
-    ticket: Ticket
+    ticket: [Ticket]
   }
   updateTicketPayload: {
-    ticket: Ticket
+    ticket: [Ticket]
   }
   deleteTicketPayload: {
-    ticket: Ticket
+    ticket: [Ticket]
   }
 }
 
@@ -159,7 +159,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Cannot create ticket");
       }
 
-      return data.addTicketPayload.ticket;
+      return data.addTicketPayload.ticket[0];
     },
     updateTicket: async (_: any, { ticketId, data: inputData }) => {
       // Get an instance of GrahpQL Client.
@@ -207,7 +207,7 @@ const resolvers: Resolvers = {
       if (!data.updateTicketPayload.ticket)
         throw new UserInputError("Cannot update ticket since ticketId not found");
 
-      return data.updateTicketPayload.ticket;
+      return data.updateTicketPayload.ticket[0];
     },
     deleteTicket: async (_: any, { ticketId }) => {
       // Get an instance of GraphQL Client
@@ -244,7 +244,7 @@ const resolvers: Resolvers = {
       if (!data.deleteTicketPayload.ticket)
         throw new UserInputError("Cannot delete ticket since ticketId not found");
 
-      return data.deleteTicketPayload.ticket;
+      return data.deleteTicketPayload.ticket[0];
     }
   },
 };

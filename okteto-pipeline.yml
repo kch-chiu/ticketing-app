@@ -1,15 +1,15 @@
 deploy:
   - envsubst < manifests/kustomization.template.yml > manifests/kustomization.yml
   - envsubst < tickets/.template.npmrc > tickets/.npmrc
-  - cd tickets; okteto build -t okteto.dev/tickets:$OKTETO_GIT_COMMIT .
-  - cd manifests; kustomize edit set image okteto/tickets:buildTag=okteto.dev/tickets:$OKTETO_GIT_COMMIT
+  - cd tickets && okteto build -t okteto.dev/tickets:$OKTETO_GIT_COMMIT .
+  - cd manifests && kustomize edit set image okteto/tickets:buildTag=okteto.dev/tickets:$OKTETO_GIT_COMMIT
   - envsubst < orders/.template.npmrc > orders/.npmrc
-  - cd orders; okteto build -t okteto.dev/orders:$OKTETO_GIT_COMMIT .
-  - cd manifests; kustomize edit set image okteto/orders:buildTag=okteto.dev/orders:$OKTETO_GIT_COMMIT
+  - cd orders && okteto build -t okteto.dev/orders:$OKTETO_GIT_COMMIT .
+  - cd manifests && kustomize edit set image okteto/orders:buildTag=okteto.dev/orders:$OKTETO_GIT_COMMIT
   - envsubst < gateway/.template.npmrc > gateway/.npmrc
-  - cd gateway; okteto build -t okteto.dev/gateway:$OKTETO_GIT_COMMIT .
-  - cd manifests; kustomize edit set image okteto/gateway:buildTag=okteto.dev/gateway:$OKTETO_GIT_COMMIT
+  - cd gateway && okteto build -t okteto.dev/gateway:$OKTETO_GIT_COMMIT .
+  - cd manifests && kustomize edit set image okteto/gateway:buildTag=okteto.dev/gateway:$OKTETO_GIT_COMMIT
   - envsubst < gateway-dgraph/.template.npmrc > gateway-dgraph/.npmrc
-  - cd gateway-dgraph; okteto build -t okteto.dev/gateway-dgraph:$OKTETO_GIT_COMMIT .
-  - cd manifests; kustomize edit set image okteto/gateway-dgraph:buildTag=okteto.dev/gateway-dgraph:$OKTETO_GIT_COMMIT
+  - cd gateway-dgraph && okteto build -t okteto.dev/gateway-dgraph:$OKTETO_GIT_COMMIT .
+  - cd manifests && kustomize edit set image okteto/gateway-dgraph:buildTag=okteto.dev/gateway-dgraph:$OKTETO_GIT_COMMIT
   - kustomize build manifests | kubectl apply -f -

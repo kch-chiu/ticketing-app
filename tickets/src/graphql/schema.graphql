@@ -16,6 +16,6 @@ input TicketInput {
 
 extend type Mutation {
   addTicket(data: TicketInput!): Ticket!
-  updateTicket(ticketId: ID!, data: TicketInput!): Ticket!
-  deleteTicket(ticketId: ID!): Ticket!
+  updateTicket(ticketId: ID!, data: TicketInput!): Ticket
+  deleteTicket(ticketId: ID!): Ticket
 }

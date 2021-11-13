@@ -25,8 +25,8 @@ export type Scalars = {
 export type Mutation = {
   __typename?: "Mutation";
   addOrder: Order;
-  deleteOrder: Order;
-  updateOrder: Order;
+  deleteOrder?: Maybe<Order>;
+  updateOrder?: Maybe<Order>;
 };
 
 export type MutationAddOrderArgs = {
@@ -236,13 +236,13 @@ export type MutationResolvers<
     RequireFields<MutationAddOrderArgs, "data">
   >;
   deleteOrder?: Resolver<
-    ResolversTypes["Order"],
+    Maybe<ResolversTypes["Order"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteOrderArgs, "orderId">
   >;
   updateOrder?: Resolver<
-    ResolversTypes["Order"],
+    Maybe<ResolversTypes["Order"]>,
     ParentType,
     ContextType,
     RequireFields<MutationUpdateOrderArgs, "data" | "orderId">

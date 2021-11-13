@@ -26,6 +26,6 @@ input OrderInput {
 
 extend type Mutation {
   addOrder(data: OrderInput!): Order!
-  updateOrder(orderId: ID!, data: OrderInput!): Order!
-  deleteOrder(orderId: ID!): Order!
+  updateOrder(orderId: ID!, data: OrderInput!): Order
+  deleteOrder(orderId: ID!): Order
 }

@@ -25,8 +25,8 @@ export type Scalars = {
 export type Mutation = {
   __typename?: "Mutation";
   addTicket: Ticket;
-  deleteTicket: Ticket;
-  updateTicket: Ticket;
+  deleteTicket?: Maybe<Ticket>;
+  updateTicket?: Maybe<Ticket>;
 };
 
 export type MutationAddTicketArgs = {
@@ -224,13 +224,13 @@ export type MutationResolvers<
     RequireFields<MutationAddTicketArgs, "data">
   >;
   deleteTicket?: Resolver<
-    ResolversTypes["Ticket"],
+    Maybe<ResolversTypes["Ticket"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteTicketArgs, "ticketId">
   >;
   updateTicket?: Resolver<
-    ResolversTypes["Ticket"],
+    Maybe<ResolversTypes["Ticket"]>,
     ParentType,
     ContextType,
     RequireFields<MutationUpdateTicketArgs, "data" | "ticketId">

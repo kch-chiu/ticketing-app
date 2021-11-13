@@ -154,7 +154,7 @@ const resolvers: Resolvers = {
           {
             status,
             "ticket": {
-              ticketId
+              "ticketId": ticketId.toString()
             }
           }
         ]

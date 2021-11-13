@@ -31,7 +31,9 @@ const resolvers: Resolvers = {
           order: getOrder(orderId: $orderId) {
             orderId
             status
-            ticket
+            ticket {
+              ticketId
+            }
           }
         }
       `;
@@ -51,6 +53,10 @@ const resolvers: Resolvers = {
 
       if (!data.order)
         throw new UserInputError("Order cannot be found");
+
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      data.order.ticket = data.order.ticket.ticketId;
 
       return data.order;
     },
@@ -84,6 +90,10 @@ const resolvers: Resolvers = {
       } catch (error) {
         throw new UserInputError("Cannot fetch orders");
       }
+
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      (data.allOrders).map(order => order.ticket = order.ticket.ticketId);
 
       return data.allOrders;
     },
@@ -120,6 +130,10 @@ const resolvers: Resolvers = {
       if (!data.order)
         throw new UserInputError("Cannot find order")
 
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      data.order.ticket = data.order.ticket.ticketId;
+
       return data.order;
     },
   },
@@ -154,7 +168,7 @@ const resolvers: Resolvers = {
           {
             status,
             "ticket": {
-              "ticketId": ticketId.toString()
+              ticketId
             }
           }
         ]
@@ -167,6 +181,10 @@ const resolvers: Resolvers = {
       } catch (error) {
         throw new UserInputError("Invalid tickedId");
       }
+
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      data.addOrderPayload.order[0].ticket = data.addOrderPayload.order[0].ticket.ticketId;
 
       return data.addOrderPayload.order[0];
     },
@@ -217,6 +235,10 @@ const resolvers: Resolvers = {
       if (!data.updateOrderPayload.order)
         throw new UserInputError("Cannot update order since orderId not found");
 
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      data.updateOrderPayload.order[0].ticket = data.updateOrderPayload.order[0].ticket.ticketId;
+
       return data.updateOrderPayload.order[0];
     },
     deleteOrder: async (_: any, { orderId }) => {
@@ -256,6 +278,10 @@ const resolvers: Resolvers = {
       if (!data.deleteOrderPayload.order)
         throw new UserInputError("Cannot delete order since orderId not found");
 
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      data.updateOrderPayload.order[0].ticket = data.updateOrderPayload.order[0].ticket.ticketId;
+      
       return data.deleteOrderPayload.order[0];
     },
   },

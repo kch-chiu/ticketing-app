@@ -6,7 +6,7 @@ type Ticket @key(fields: "ticketId") {
 
 extend type Query {
   getAllTickets: [Ticket]!
-  getTicket(ticketId: ID!): Ticket!
+  getTicket(ticketId: ID!): Ticket
 }
 
 input TicketInput {

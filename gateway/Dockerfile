@@ -1,9 +1,8 @@
 FROM node:16.13.0-alpine
 
 WORKDIR /app
-COPY package.json package-lock.json .npmrc ./
+COPY package.json package-lock.json ./
 RUN npm ci --only=prod
-RUN rm -f .npmrc
 COPY . .
 
 ENTRYPOINT [ "npm", "start" ]

@@ -49,7 +49,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!data.ticket)
+      if (!(data.ticket))
         throw new UserInputError("Ticket cannot be found");
 
       return data.ticket;
@@ -109,7 +109,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!data.ticket)
+      if (!(data.ticket))
         throw new UserInputError("Cannot find ticket");
 
       return data.ticket;
@@ -204,7 +204,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!data.updateTicketPayload.ticket)
+      if (!(data.updateTicketPayload.ticket[0]))
         throw new UserInputError("Cannot update ticket since ticketId not found");
 
       return data.updateTicketPayload.ticket[0];
@@ -241,7 +241,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!data.deleteTicketPayload.ticket)
+      if (!(data.deleteTicketPayload.ticket[0]))
         throw new UserInputError("Cannot delete ticket since ticketId not found");
 
       return data.deleteTicketPayload.ticket[0];

@@ -51,7 +51,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!data.order)
+      if (!(data.order))
         throw new UserInputError("Order cannot be found");
 
       // Update reference for Apollo Federation
@@ -127,7 +127,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!data.order)
+      if (!(data.order))
         throw new UserInputError("Cannot find order")
 
       // Update reference for Apollo Federation
@@ -232,7 +232,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!data.updateOrderPayload.order)
+      if (!(data.updateOrderPayload.order[0]))
         throw new UserInputError("Cannot update order since orderId not found");
 
       // Update reference for Apollo Federation
@@ -275,12 +275,12 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!data.deleteOrderPayload.order)
+      if (!(data.deleteOrderPayload.order[0]))
         throw new UserInputError("Cannot delete order since orderId not found");
 
       // Update reference for Apollo Federation
       //@ts-ignore
-      data.updateOrderPayload.order[0].ticket = data.updateOrderPayload.order[0].ticket.ticketId;
+      data.deleteOrderPayload.order[0].ticket = data.deleteOrderPayload.order[0].ticket.ticketId;
       
       return data.deleteOrderPayload.order[0];
     },

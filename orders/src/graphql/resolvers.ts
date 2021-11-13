@@ -51,14 +51,16 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!(data.order))
+      const { order } = data;
+
+      if (!order)
         throw new UserInputError("Order cannot be found");
 
       // Update reference for Apollo Federation
       //@ts-ignore
-      data.order.ticket = data.order.ticket.ticketId;
+      order.ticket = order.ticket.ticketId;
 
-      return data.order;
+      return order;
     },
     //@ts-ignore
     ticket: ({ ticket }: any) => {
@@ -91,11 +93,13 @@ const resolvers: Resolvers = {
         throw new UserInputError("Cannot fetch orders");
       }
 
+      const { allOrders } = data;
+
       // Update reference for Apollo Federation
       //@ts-ignore
-      (data.allOrders).map(order => order.ticket = order.ticket.ticketId);
+      allOrders.map(order => order.ticket = order.ticket.ticketId);
 
-      return data.allOrders;
+      return allOrders;
     },
     getOrder: async (_: any, { orderId }) => {
       // Get an instance of GraphQL Client
@@ -127,14 +131,16 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!(data.order))
+      const { order } = data;
+
+      if (!order)
         throw new UserInputError("Cannot find order")
 
       // Update reference for Apollo Federation
       //@ts-ignore
-      data.order.ticket = data.order.ticket.ticketId;
+      order.ticket = order.ticket.ticketId;
 
-      return data.order;
+      return order;
     },
   },
   Mutation: {
@@ -182,17 +188,19 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid tickedId");
       }
 
+      const [ order ] = data.addOrderPayload.order;
+
       // Update reference for Apollo Federation
       //@ts-ignore
-      data.addOrderPayload.order[0].ticket = data.addOrderPayload.order[0].ticket.ticketId;
+      order.ticket = order.ticket.ticketId;
 
-      return data.addOrderPayload.order[0];
+      return order;
     },
     updateOrder: async (_: any, { orderId, data: inputData }) => {
       // Get an instance of GraphQL Client
       const client = getClient();
 
-      const { status } = inputData;
+      const { status, ticketId } = inputData;
 
       if (!Object.values(OrderStatus).includes(status))
         throw new UserInputError("Status is not a valid status");
@@ -232,14 +240,19 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!(data.updateOrderPayload.order[0]))
-        throw new UserInputError("Cannot update order since orderId not found");
+      const [ order ] = data.updateOrderPayload.order;
 
+      if (!order)
+        throw new UserInputError("Cannot update order since orderId was not found");
+
+      if (order.ticket.ticketId !== ticketId)
+        throw new UserInputError("Cannot update order since ticketId was not found");
+        
       // Update reference for Apollo Federation
       //@ts-ignore
-      data.updateOrderPayload.order[0].ticket = data.updateOrderPayload.order[0].ticket.ticketId;
+      order.ticket = order.ticket.ticketId;
 
-      return data.updateOrderPayload.order[0];
+      return order;
     },
     deleteOrder: async (_: any, { orderId }) => {
       // Get an instance of GraphQL Client
@@ -275,14 +288,16 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid orderId");
       }
 
-      if (!(data.deleteOrderPayload.order[0]))
+      const [ order ] = data.deleteOrderPayload.order;
+
+      if (!order)
         throw new UserInputError("Cannot delete order since orderId not found");
 
       // Update reference for Apollo Federation
       //@ts-ignore
-      data.deleteOrderPayload.order[0].ticket = data.deleteOrderPayload.order[0].ticket.ticketId;
+      order.ticket = order.ticket.ticketId;
       
-      return data.deleteOrderPayload.order[0];
+      return order;
     },
   },
 };

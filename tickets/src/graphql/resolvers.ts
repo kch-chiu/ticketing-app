@@ -49,10 +49,12 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!(data.ticket))
+      const { ticket } = data;
+
+      if (!ticket)
         throw new UserInputError("Ticket cannot be found");
 
-      return data.ticket;
+      return ticket;
     },
   },
   Query: {
@@ -79,7 +81,9 @@ const resolvers: Resolvers = {
         throw new UserInputError("Cannot fetch tickets");
       }
 
-      return data.allTickets;
+      const { allTickets } = data;
+
+      return allTickets;
     },
     getTicket: async (_: any, { ticketId }) => {
       // Get an instance of GraphQL Client
@@ -109,10 +113,12 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!(data.ticket))
+      const { ticket } = data;
+
+      if (!ticket)
         throw new UserInputError("Cannot find ticket");
 
-      return data.ticket;
+      return ticket;
     },
   },
   Mutation: {
@@ -159,7 +165,9 @@ const resolvers: Resolvers = {
         throw new UserInputError("Cannot create ticket");
       }
 
-      return data.addTicketPayload.ticket[0];
+      const [ ticket ] = data.addTicketPayload.ticket;
+
+      return ticket;
     },
     updateTicket: async (_: any, { ticketId, data: inputData }) => {
       // Get an instance of GrahpQL Client.
@@ -204,10 +212,12 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!(data.updateTicketPayload.ticket[0]))
+      const [ ticket ] = data.updateTicketPayload.ticket;
+
+      if (!ticket)
         throw new UserInputError("Cannot update ticket since ticketId not found");
 
-      return data.updateTicketPayload.ticket[0];
+      return ticket;
     },
     deleteTicket: async (_: any, { ticketId }) => {
       // Get an instance of GraphQL Client
@@ -241,10 +251,12 @@ const resolvers: Resolvers = {
         throw new UserInputError("Invalid ticketId");
       }
 
-      if (!(data.deleteTicketPayload.ticket[0]))
+      const [ ticket ] = data.deleteTicketPayload.ticket;
+
+      if (!ticket)
         throw new UserInputError("Cannot delete ticket since ticketId not found");
 
-      return data.deleteTicketPayload.ticket[0];
+      return ticket;
     }
   },
 };

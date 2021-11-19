@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - tickets.yml
   - orders.yml
+  - payments.yml
   - ingress.yml
   - gateway.yml
   - dgraph.yml
@@ -24,6 +25,9 @@ configMapGenerator:
       - apollo-graph-ref=ticketing-gateway@current
       - node-env=production
       - gateway-dgraph-url=http://gateway-srv:4000/graphql
+  - name: payments-config
+    literals:
+      - stripe-api-version=2020-8-27
   - name: gateway-dgraph-config
     literals:
       - apollo-graph-ref=ticketing-gateway-dgraph-ex1l5e@current
@@ -31,7 +35,7 @@ configMapGenerator:
       - gateway-dgraph-url=http://gateway-dgraph-srv:5000/graphql
   - name: dgraph-config
     literals:
-      - dgraph-alpha-security="whitelist=0.0.0.0/0"
+      - dgraph-alpha-security=whitelist=0.0.0.0/0
 
 secretGenerator:
   - name: github-client-secret

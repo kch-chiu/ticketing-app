@@ -1,21 +1,24 @@
-import express from "express";
-import "express-async-errors";
-import { json } from "body-parser";
-
-import { errorHandler, NotFoundError, currentUser } from "@kch-chiu/common";
-
-import { createChargeRouter } from "./routes/new";
+import express, { Express } from "express";
+import { ApolloServer } from "apollo-server-express";
+import { buildSubgraphSchema } from "@apollo/federation";
+import "graphql-import-node";
+import * as typeDefs from "../src/graphql/schema.graphql";
+import resolvers from "../src/graphql/resolvers";
+import { Resolvers } from '../src/graphql/types';
+import { DocumentNode } from 'graphql';
 
 const app = express();
-app.use(json());
-app.use(currentUser);
 
-app.use(createChargeRouter);
+const startApolloServer = async (app: Express, typeDefs: DocumentNode, resolvers: Resolvers) => {
+  const schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
 
-app.all("*", async (req, res) => {
-  throw new NotFoundError();
-});
+  const server = new ApolloServer({ schema });
 
-app.use(errorHandler);
+  await server.start();
+  
+  server.applyMiddleware({ app });
+}
+
+startApolloServer(app, typeDefs, resolvers);
 
 export { app };

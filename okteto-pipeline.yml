@@ -4,6 +4,8 @@ deploy:
   - cd manifests && kustomize edit set image okteto/tickets:buildTag=okteto.dev/tickets:$OKTETO_GIT_COMMIT
   - cd orders && okteto build --tag okteto.dev/orders:$OKTETO_GIT_COMMIT --no-cache --build-arg NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN .
   - cd manifests && kustomize edit set image okteto/orders:buildTag=okteto.dev/orders:$OKTETO_GIT_COMMIT
+  - cd payments && okteto build --tag okteto/payments:$OKTETO_GIT_COMMIT --no-cache --build-arg NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN .
+  - cd manifests && kustomize edit set image okteto/payments:buildTag=okteto.dev/orders:$OKTETO_GIT_COMMIT
   - cd gateway && okteto build --tag okteto.dev/gateway:$OKTETO_GIT_COMMIT --no-cache --build-arg NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN .
   - cd manifests && kustomize edit set image okteto/gateway:buildTag=okteto.dev/gateway:$OKTETO_GIT_COMMIT
   - cd gateway-dgraph && okteto build --tag okteto.dev/gateway-dgraph:$OKTETO_GIT_COMMIT --no-cache --build-arg NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN .

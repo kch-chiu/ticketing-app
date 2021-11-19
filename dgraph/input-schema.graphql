@@ -15,3 +15,9 @@ type Order @key(fields: "orderId") {
   status: OrderStatus!
   ticket: Ticket!
 }
+
+type Payment @key(fields: "paymentId") {
+  paymentId: ID!
+  stripeId: String!
+  order: Order!
+}

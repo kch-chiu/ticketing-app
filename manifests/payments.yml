@@ -16,23 +16,28 @@ spec:
         - name: payments
           image: okteto/payments:buildTag
           env:
-            - name: DGRAPH_URI
+            - name: GATEWAY_DGRAPH_URL
               valueFrom:
                 configMapKeyRef:
-                  name: dgraph-config
-                  key: dgraph-uri
+                  name: gateway-dgraph-config
+                  key: gateway-dgraph-uri
             - name: STRIPE_KEY
               valueFrom:
                 secretKeyRef:
                   name: stripe-key
                   key: stripe-key
+            - name: STRIPE_API_VERISON
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-api-version
           resources:
             requests:
-              memory: '250Mi'
-              cpu: '125m'
+              memory: '125Mi'
+              cpu: '100m'
             limits:
-              memory: '500Mi'
-              cpu: '250m'
+              memory: '250Mi'
+              cpu: '200m'
   strategy:
     type: Recreate
 ---

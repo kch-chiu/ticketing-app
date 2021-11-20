@@ -7,16 +7,18 @@ import _ from 'lodash';
 const start = async () => {
   console.log("Starting.............");
 
-  if (_.isEmpty(process.env.GATEWAY_DGRAPH_URL))
+  const { GATEWAY_DGRAPH_URL, STRIPE_KEY, STRIPE_API_VERSION } = process.env;
+
+  if (_.isEmpty(GATEWAY_DGRAPH_URL))
     throw new Error("GATEWAY_DGRAPH_URL must be defined");
 
-  if (_.isEmpty(process.env.STRIPE_KEY))
+  if (_.isEmpty(STRIPE_KEY))
     throw new Error("STRIPE_KEY must be defined");
 
   try {
-    graphQLClientWrapper.connect(<string>process.env.GATEWAY_DGRAPH_URL);
+    graphQLClientWrapper.connect(GATEWAY_DGRAPH_URL!);
     console.log("Connected to Dgraph");
-    stripeWrapper.connect(<string>process.env.STRIPE_KEY, <Stripe.LatestApiVersion>process.env.STRIPE_API_VERSION);
+    stripeWrapper.connect(STRIPE_KEY!, <Stripe.LatestApiVersion>STRIPE_API_VERSION);
     console.log("Connected to stripe");
   } catch (err) {
     console.error(err);

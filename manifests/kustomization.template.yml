@@ -28,6 +28,12 @@ configMapGenerator:
   - name: payments-config
     literals:
       - stripe-api-version=2020-8-27
+      - stripe-payment-method-type=card
+      - stripe-currency=usd
+      - stripe-mode=payment
+      - stripe-callback-url=https://ticketing-app-kch-chiu.cloud.okteto.net/orders
+      - stripe-callback-url-success=success
+      - stripe-callback-url-cancel=cancel
   - name: gateway-dgraph-config
     literals:
       - apollo-graph-ref=ticketing-gateway-dgraph-ex1l5e@current

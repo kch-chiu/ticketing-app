@@ -17,13 +17,13 @@ interface TicketData {
   }
 }
 
-const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
+const getGraphQLClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
 
 const resolvers: Resolvers = {
   Ticket: {
     __resolveReference: async ({ ticketId }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a query
       const query = gql`
@@ -44,7 +44,7 @@ const resolvers: Resolvers = {
       // Run query and get ticket
       let data;
       try {
-        data = <TicketData>await client.request(query, variables);
+        data = <TicketData>await graphQLClient.request(query, variables);
       } catch (error) {
         throw new UserInputError("Invalid ticketId");
       }
@@ -59,8 +59,8 @@ const resolvers: Resolvers = {
   },
   Query: {
     getAllTickets: async () => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a query
       const query = gql`
@@ -76,7 +76,7 @@ const resolvers: Resolvers = {
       // Run query and get all tickets
       let data;
       try {
-        data = <TicketData>await client.request(query);
+        data = <TicketData>await graphQLClient.request(query);
       } catch (error) {
         throw new UserInputError("Cannot fetch tickets");
       }
@@ -86,8 +86,8 @@ const resolvers: Resolvers = {
       return allTickets;
     },
     getTicket: async (_: any, { ticketId }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a query.
       const query = gql`
@@ -108,7 +108,7 @@ const resolvers: Resolvers = {
       // Run query and get ticket
       let data;
       try {
-        data = <TicketData>await client.request(query, variables);
+        data = <TicketData>await graphQLClient.request(query, variables);
       } catch (error) {
         throw new UserInputError("Invalid ticketId");
       }
@@ -123,8 +123,8 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     addTicket: async (_: any, { data: inputData }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       const { title, price } = inputData;
 
@@ -160,7 +160,7 @@ const resolvers: Resolvers = {
       // Run mutation
       let data;
       try {
-        data = <TicketData>await client.request(mutation, variables);
+        data = <TicketData>await graphQLClient.request(mutation, variables);
       } catch (error) {
         throw new UserInputError("Cannot create ticket");
       }
@@ -170,8 +170,8 @@ const resolvers: Resolvers = {
       return ticket;
     },
     updateTicket: async (_: any, { ticketId, data: inputData }) => {
-      // Get an instance of GrahpQL Client.
-      const client = getClient();
+      // Get an instance of GrahpQLClient.
+      const graphQLClient = getGraphQLClient();
 
       const { title, price } = inputData;
 
@@ -207,7 +207,7 @@ const resolvers: Resolvers = {
       // Run mutation
       let data;
       try {
-        data = <TicketData>await client.request(mutation, variables);
+        data = <TicketData>await graphQLClient.request(mutation, variables);
       } catch (errors) {
         throw new UserInputError("Invalid ticketId");
       }
@@ -220,8 +220,8 @@ const resolvers: Resolvers = {
       return ticket;
     },
     deleteTicket: async (_: any, { ticketId }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a mutation
       const mutation = gql`
@@ -246,7 +246,7 @@ const resolvers: Resolvers = {
       // Run mutation
       let data;
       try {
-        data = <TicketData>await client.request(mutation, variables);
+        data = <TicketData>await graphQLClient.request(mutation, variables);
       } catch (errors) {
         throw new UserInputError("Invalid ticketId");
       }

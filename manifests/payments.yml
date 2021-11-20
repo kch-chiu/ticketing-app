@@ -31,6 +31,36 @@ spec:
                 configMapKeyRef:
                   name: payments-config
                   key: stripe-api-version
+            - name: STRIPE_PAYMENT_METHOD_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-payment-method-type
+            - name: STRIPE_CURRENCY
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-currency
+            - name: STRIPE_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-mode
+            - name: STRIPE_CALLBACK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-callback-url
+            - name: STRIPE_CALLBACK_URL_SUCCESS
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-callback-url-success
+            - name: STRIPE_CALLBACK_URL_CANCEL
+              valueFrom:
+                configMapKeyRef:
+                  name: payments-config
+                  key: stripe-callback-url-cancel
           resources:
             requests:
               memory: '125Mi'

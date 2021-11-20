@@ -17,13 +17,13 @@ interface OrderData {
   }
 }
 
-const getClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
+const getGraphQLClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
 
 const resolvers: Resolvers = {
   Order: {
     __resolveReference: async ({ orderId }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a query
       const query = gql`
@@ -46,7 +46,7 @@ const resolvers: Resolvers = {
       // Run query and get order
       let data;
       try {
-        data = <OrderData>await client.request(query, variables);
+        data = <OrderData>await graphQLClient.request(query, variables);
       } catch (error) {
         throw new UserInputError("Invalid orderId");
       }
@@ -70,7 +70,7 @@ const resolvers: Resolvers = {
   Query: {
     getAllOrders: async () => {
       // Get an instance of GraphQL Client
-      const client = getClient();
+      const graphQLClient = getGraphQLClient();
 
       // Create a query
       const query = gql`
@@ -88,7 +88,7 @@ const resolvers: Resolvers = {
       // Run query and get all orders
       let data;
       try {
-        data = <OrderData>await client.request(query);
+        data = <OrderData>await graphQLClient.request(query);
       } catch (error) {
         throw new UserInputError("Cannot fetch orders");
       }
@@ -102,8 +102,8 @@ const resolvers: Resolvers = {
       return allOrders;
     },
     getOrder: async (_: any, { orderId }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a query
       const query = gql`
@@ -126,7 +126,7 @@ const resolvers: Resolvers = {
       // Run query and get order
       let data;
       try {
-        data = <OrderData>await client.request(query, variables);
+        data = <OrderData>await graphQLClient.request(query, variables);
       } catch (error) {
         throw new UserInputError("Invalid orderId");
       }
@@ -145,8 +145,8 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     addOrder: async (_: any, { data: inputData }) => {
-      // Get an instance of GraphQL Client.
-      const client = getClient();
+      // Get an instance of GraphQLClient.
+      const graphQLClient = getGraphQLClient();
 
       const { status, ticketId } = inputData;
 
@@ -183,7 +183,7 @@ const resolvers: Resolvers = {
       // Run mutation
       let data;
       try {
-        data = <OrderData>await client.request(mutation, variables);
+        data = <OrderData>await graphQLClient.request(mutation, variables);
       } catch (error) {
         throw new UserInputError("Invalid tickedId");
       }
@@ -197,8 +197,8 @@ const resolvers: Resolvers = {
       return order;
     },
     updateOrder: async (_: any, { orderId, data: inputData }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       const { status, ticketId } = inputData;
 
@@ -235,7 +235,7 @@ const resolvers: Resolvers = {
       // Run mutation
       let data;
       try {
-        data = <OrderData>await client.request(mutation, variables);
+        data = <OrderData>await graphQLClient.request(mutation, variables);
       } catch (errors) {
         throw new UserInputError("Invalid orderId");
       }
@@ -255,8 +255,8 @@ const resolvers: Resolvers = {
       return order;
     },
     deleteOrder: async (_: any, { orderId }) => {
-      // Get an instance of GraphQL Client
-      const client = getClient();
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
       // Create a mutation
       const mutation = gql`
@@ -283,7 +283,7 @@ const resolvers: Resolvers = {
       // Run mutation
       let data;
       try {
-        data = <OrderData>await client.request(mutation, variables);
+        data = <OrderData>await graphQLClient.request(mutation, variables);
       } catch (errors) {
         throw new UserInputError("Invalid orderId");
       }

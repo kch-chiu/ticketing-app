@@ -35,47 +35,47 @@ jobs:
       - name: Build and push tickiets
         uses: docker/build-push-action@v2
         with:
-          tags: registry.cloud.okteto.net/kch-chiu/tickets:${GITHUB_SHA}
-          build-args: NODE_AUTH_TOKEN=${GITHUB_TOKEN}
+          tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: tickets/Dockerfile
           push: true
 
       - name: Build and push orders
         uses: docker/build-push-action@v2
         with:
-          tags: registry.cloud.okteto.net/kch-chiu/orders:${GITHUB_SHA}
-          build-args: NODE_AUTH_TOKEN=${GITHUB_TOKEN}
+          tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: orders/Dockerfile
           push: true
 
       - name: Build and push payments
         uses: docker/build-push-action@v2
         with:
-          tags: registry.cloud.okteto.net/kch-chiu/payments:${GITHUB_SHA}
-          build-args: NODE_AUTH_TOKEN=${GITHUB_TOKEN}
+          tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: payments/Dockerfile
           push: true
 
       - name: Build and push gateway
         uses: docker/build-push-action@v2
         with:
-          tags: registry.cloud.okteto.net/kch-chiu/gateway:${GITHUB_SHA}
-          build-args: NODE_AUTH_TOKEN=${GITHUB_TOKEN}
+          tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: gateway/Dockerfile
           push: true
 
       - name: Build and push gateway-dgraph
         uses: docker/build-push-action@v2
         with:
-          tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${GITHUB_TOKEN}
-          build-args: NODE_AUTH_TOKEN=${GITHUB_TOKEN}
+          tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: gateway-dgraph/Dockerfile
           push: true
 
       - name: Trigger the pipeline
         uses: okteto/pipeline@master
         with:
-          name: $GITHUB_WORKFLOW
+          name: ${{ github.action }}
           timeout: 10m
 
       - name: Publish GraphQL Dgraph schema

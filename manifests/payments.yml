@@ -20,7 +20,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: gateway-dgraph-config
-                  key: gateway-dgraph-uri
+                  key: gateway-dgraph-url
             - name: STRIPE_KEY
               valueFrom:
                 secretKeyRef:

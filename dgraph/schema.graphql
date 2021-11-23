@@ -20,6 +20,12 @@ type Order @key(fields: "orderId") {
 	ticket(filter: TicketFilter): Ticket!
 }
 
+type Payment @key(fields: "paymentId") {
+	paymentId: ID!
+	stripeId: String!
+	order(filter: OrderFilter): Order!
+}
+
 #######################
 # Extended Definitions
 #######################
@@ -278,6 +284,11 @@ type AddOrderPayload {
 	numUids: Int
 }
 
+type AddPaymentPayload {
+	payment(filter: PaymentFilter, order: PaymentOrder, first: Int, offset: Int): [Payment]
+	numUids: Int
+}
+
 type AddTicketPayload {
 	ticket(filter: TicketFilter, order: TicketOrder, first: Int, offset: Int): [Ticket]
 	numUids: Int
@@ -285,6 +296,12 @@ type AddTicketPayload {
 
 type DeleteOrderPayload {
 	order(filter: OrderFilter, first: Int, offset: Int): [Order]
+	msg: String
+	numUids: Int
+}
+
+type DeletePaymentPayload {
+	payment(filter: PaymentFilter, order: PaymentOrder, first: Int, offset: Int): [Payment]
 	msg: String
 	numUids: Int
 }
@@ -297,6 +314,12 @@ type DeleteTicketPayload {
 
 type OrderAggregateResult {
 	count: Int
+}
+
+type PaymentAggregateResult {
+	count: Int
+	stripeIdMin: String
+	stripeIdMax: String
 }
 
 type TicketAggregateResult {
@@ -314,6 +337,11 @@ type UpdateOrderPayload {
 	numUids: Int
 }
 
+type UpdatePaymentPayload {
+	payment(filter: PaymentFilter, order: PaymentOrder, first: Int, offset: Int): [Payment]
+	numUids: Int
+}
+
 type UpdateTicketPayload {
 	ticket(filter: TicketFilter, order: TicketOrder, first: Int, offset: Int): [Ticket]
 	numUids: Int
@@ -326,6 +354,15 @@ type UpdateTicketPayload {
 enum OrderHasFilter {
 	status
 	ticket
+}
+
+enum PaymentHasFilter {
+	stripeId
+	order
+}
+
+enum PaymentOrderable {
+	stripeId
 }
 
 enum TicketHasFilter {
@@ -345,6 +382,11 @@ enum TicketOrderable {
 input AddOrderInput {
 	status: OrderStatus!
 	ticket: TicketRef!
+}
+
+input AddPaymentInput {
+	stripeId: String!
+	order: OrderRef!
 }
 
 input AddTicketInput {
@@ -369,6 +411,31 @@ input OrderRef {
 	orderId: ID
 	status: OrderStatus
 	ticket: TicketRef
+}
+
+input PaymentFilter {
+	paymentId: [ID!]
+	has: [PaymentHasFilter]
+	and: [PaymentFilter]
+	or: [PaymentFilter]
+	not: PaymentFilter
+}
+
+input PaymentOrder {
+	asc: PaymentOrderable
+	desc: PaymentOrderable
+	then: PaymentOrder
+}
+
+input PaymentPatch {
+	stripeId: String
+	order: OrderRef
+}
+
+input PaymentRef {
+	paymentId: ID
+	stripeId: String
+	order: OrderRef
 }
 
 input TicketFilter {
@@ -402,6 +469,12 @@ input UpdateOrderInput {
 	remove: OrderPatch
 }
 
+input UpdatePaymentInput {
+	filter: PaymentFilter!
+	set: PaymentPatch
+	remove: PaymentPatch
+}
+
 input UpdateTicketInput {
 	filter: TicketFilter!
 	set: TicketPatch
@@ -419,6 +492,9 @@ type Query {
 	getOrder(orderId: ID!): Order
 	queryOrder(filter: OrderFilter, first: Int, offset: Int): [Order]
 	aggregateOrder(filter: OrderFilter): OrderAggregateResult
+	getPayment(paymentId: ID!): Payment
+	queryPayment(filter: PaymentFilter, order: PaymentOrder, first: Int, offset: Int): [Payment]
+	aggregatePayment(filter: PaymentFilter): PaymentAggregateResult
 }
 
 #######################
@@ -432,5 +508,8 @@ type Mutation {
 	addOrder(input: [AddOrderInput!]!): AddOrderPayload
 	updateOrder(input: UpdateOrderInput!): UpdateOrderPayload
 	deleteOrder(filter: OrderFilter!): DeleteOrderPayload
+	addPayment(input: [AddPaymentInput!]!): AddPaymentPayload
+	updatePayment(input: UpdatePaymentInput!): UpdatePaymentPayload
+	deletePayment(filter: PaymentFilter!): DeletePaymentPayload
 }
 

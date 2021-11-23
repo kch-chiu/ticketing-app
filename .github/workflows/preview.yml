@@ -75,7 +75,7 @@ jobs:
       - name: Trigger the pipeline
         uses: okteto/pipeline@master
         with:
-          name: ${{ github.action }}
+          name: ${{ github.workflow }}
           timeout: 10m
 
       - name: Publish GraphQL Dgraph schema

@@ -32,9 +32,10 @@ jobs:
         with:
           namespace: kch-chiu
 
-      - name: Build and push tickiets
+      - name: Build and push tickets
         uses: docker/build-push-action@v2
         with:
+          context: .
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: tickets/Dockerfile
@@ -43,6 +44,7 @@ jobs:
       - name: Build and push orders
         uses: docker/build-push-action@v2
         with:
+          context: .
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: orders/Dockerfile
@@ -51,6 +53,7 @@ jobs:
       - name: Build and push payments
         uses: docker/build-push-action@v2
         with:
+          context: .
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: payments/Dockerfile
@@ -59,6 +62,7 @@ jobs:
       - name: Build and push gateway
         uses: docker/build-push-action@v2
         with:
+          context: .
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: gateway/Dockerfile
@@ -67,6 +71,7 @@ jobs:
       - name: Build and push gateway-dgraph
         uses: docker/build-push-action@v2
         with:
+          context: .
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           file: gateway-dgraph/Dockerfile

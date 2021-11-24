@@ -55,7 +55,7 @@ const resolvers: Resolvers = {
         throw new UserInputError("Ticket cannot be found");
 
       return ticket;
-    },
+    }
   },
   Query: {
     getAllTickets: async () => {

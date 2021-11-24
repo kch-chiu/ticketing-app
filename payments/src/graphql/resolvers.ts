@@ -28,6 +28,12 @@ const getGraphQLClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrappe
 const getStripeClient = (): Stripe => <Stripe>stripeWrapper.client;
 
 const resolvers: Resolvers = {
+  Payment: {
+    //@ts-ignore
+    order: ({ order }: any) => {
+      return { __typename: "Order", orderId: order };
+    }
+  },
   Mutation: {
     addPayment: async (_: any, { data: inputData }) => {
       // Get an instance of stripe
@@ -105,14 +111,10 @@ const resolvers: Resolvers = {
 
       const [ payment ] = data.addPaymentPayload.payment;
 
-      console.log(`Payment is: ${JSON.stringify(payment)}`);
-      
       // Update reference for Apollo Federation
       //@ts-ignore
       payment.order = payment.order.orderId;
 
-      console.log(`Updated Payment is: ${JSON.stringify(payment)}`);
-      
       return payment;
     },
     deletePayment: async (_: any, { paymentId }) => {

@@ -65,7 +65,7 @@ const resolvers: Resolvers = {
     //@ts-ignore
     ticket: ({ ticket }: any) => {
       return { __typename: "Ticket", ticketId: ticket };
-    },
+    }
   },
   Query: {
     getAllOrders: async () => {

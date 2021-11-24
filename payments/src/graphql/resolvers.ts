@@ -67,6 +67,8 @@ const resolvers: Resolvers = {
       });
 
       const stripeId = session.id;
+      
+      console.log(`stripeId is: ${stripeId}`);
 
       // Create a mutation
       const mutation = gql`
@@ -100,10 +102,14 @@ const resolvers: Resolvers = {
       try {
         data = <PaymentData>await graphQLClient.request(mutation, variables);
       } catch (error) {
-        throw new UserInputError("Cannot create ticket");
+        throw new UserInputError("Invalid orderId");
       }
 
       const [ payment ] = data.addPaymentPayload.payment;
+      
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      payment.order = payment.order.orderId;
       
       return payment;
     },
@@ -145,6 +151,10 @@ const resolvers: Resolvers = {
 
       if (!payment)
         throw new UserInputError("Cannot delete payment since paymentId not found");
+
+      // Update reference for Apollo Federation
+      //@ts-ignore
+      payment.order = payment.order.orderId;
 
       return payment;
     }

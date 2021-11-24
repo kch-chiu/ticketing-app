@@ -185,7 +185,7 @@ const resolvers: Resolvers = {
       try {
         data = <OrderData>await graphQLClient.request(mutation, variables);
       } catch (error) {
-        throw new UserInputError("Invalid tickedId");
+        throw new UserInputError("Invalid ticketId");
       }
 
       const [ order ] = data.addOrderPayload.order;

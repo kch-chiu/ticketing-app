@@ -22,16 +22,6 @@ jobs:
           username: kch-chiu
           password: ${{ secrets.OKTETO_TOKEN }}
 
-      - name: Login to Okteto Cloud
-        uses: okteto/login@master
-        with:
-          token: ${{ secrets.OKTETO_TOKEN }}
-
-      - name: Activate Namespace
-        uses: okteto/namespace@master
-        with:
-          namespace: kch-chiu
-
       - name: Build and push tickets
         uses: docker/build-push-action@v2
         with:
@@ -71,6 +61,16 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
+
+      - name: Login to Okteto Cloud
+        uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_TOKEN }}
+
+      - name: Activate Namespace
+        uses: okteto/namespace@master
+        with:
+          namespace: kch-chiu
 
       - name: Trigger the pipeline
         uses: okteto/pipeline@master
@@ -113,7 +113,7 @@ jobs:
       
       - name: Publish GraphQL payments schema
         env:
-          APOLLO_KEY: ${{ secrets.TICETING_GATEWAY_KEY }}
+          APOLLO_KEY: ${{ secrets.TICKETING_GATEWAY_KEY }}
         run: |
           npx -p @apollo/rover \
             rover subgraph publish ticketing-gateway \

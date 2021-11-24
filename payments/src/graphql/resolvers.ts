@@ -67,13 +67,11 @@ const resolvers: Resolvers = {
       });
 
       const stripeId = session.id;
-      
-      console.log(`stripeId is: ${stripeId}`);
 
       // Create a mutation
       const mutation = gql`
         mutation addPayment($addPaymentInput: [AddPaymentInput!]!) {
-          addPaymentPayload: addPayment(input: $addPayment) {
+          addPaymentPayload: addPayment(input: $addPaymentInput) {
             payment {
               paymentId
               stripeId

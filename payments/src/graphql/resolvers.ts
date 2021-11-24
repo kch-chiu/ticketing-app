@@ -104,6 +104,8 @@ const resolvers: Resolvers = {
       }
 
       const [ payment ] = data.addPaymentPayload.payment;
+
+      console.log(`Payment is: ${payment}`);
       
       // Update reference for Apollo Federation
       //@ts-ignore

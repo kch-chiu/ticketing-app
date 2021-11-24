@@ -118,7 +118,7 @@ const resolvers: Resolvers = {
       // Create a mutation.
       const mutation = gql`
         mutation deletePayment($deletePaymentFilter: PaymentFilter!) {
-          deletePaymentPayload: deletePayment(filter: $deletePaymentPayload) {
+          deletePaymentPayload: deletePayment(filter: $deletePaymentFilter) {
             payment {
               paymentId
               stripeId

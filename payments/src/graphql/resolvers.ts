@@ -105,11 +105,13 @@ const resolvers: Resolvers = {
 
       const [ payment ] = data.addPaymentPayload.payment;
 
-      console.log(`Payment is: ${payment}`);
+      console.log(`Payment is: ${JSON.stringify(payment)}`);
       
       // Update reference for Apollo Federation
       //@ts-ignore
       payment.order = payment.order.orderId;
+
+      console.log(`Updated Payment is: ${JSON.stringify(payment)}`);
       
       return payment;
     },

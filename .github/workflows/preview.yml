@@ -89,7 +89,7 @@ jobs:
             --name dgraph \
             --convert
 
-      - name: Publish GraphQL schemas
+      - name: Publish GraphQL tickets schema
         env:
           APOLLO_KEY: ${{ secrets.TICKETING_GATEWAY_KEY }}
         run: |
@@ -99,12 +99,22 @@ jobs:
             --schema tickets/src/graphql/schema.graphql \
             --name tickets \
             --convert
+      
+      - name: Publish GraphQL orders schema
+        env:
+          APOLLO_KEY: ${{ secrets.TICKETING_GATEWAY_KEY }}
+        run: |
           npx -p @apollo/rover \
             rover subgraph publish ticketing-gateway \
             --routing-url http://orders-srv:4002/graphql \
             --schema orders/src/graphql/schema.graphql \
             --name orders \
             --convert
+      
+      - name: Publish GraphQL payments schema
+        env:
+          APOLLO_KEY: ${{ secrets.TICETING_GATEWAY_KEY }}
+        run: |
           npx -p @apollo/rover \
             rover subgraph publish ticketing-gateway \
             --routing-url http://payments-srv:4003/graphql \

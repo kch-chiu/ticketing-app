@@ -28,12 +28,12 @@ const getGraphQLClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrappe
 const getStripeClient = (): Stripe => <Stripe>stripeWrapper.client;
 
 const resolvers: Resolvers = {
-  Payment: {
-    //@ts-ignore
-    order: ({ order }: any) => {
-      return { __typename: "Order", orderId: order };
-    }
-  },
+  // Payment: {
+  //   //@ts-ignore
+  //   order: ({ order }: any) => {
+  //     return { __typename: "Order", orderId: order };
+  //   }
+  // },
   Mutation: {
     addPayment: async (_: any, { data: inputData }) => {
       // Get an instance of stripe

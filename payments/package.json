@@ -31,7 +31,7 @@
     "graphql-import-node": "^0.0.4",
     "graphql-request": "^3.6.1",
     "lodash": "^4.17.21",
-    "stripe": "^8.190.0",
+    "stripe": "^8.191.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.2"
   },
@@ -43,7 +43,7 @@
     "@types/supertest": "^2.0.11",
     "jest": "^27.3.1",
     "npm-check-updates": "^12.0.2",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "supertest": "^6.1.6",
     "ts-jest": "^27.0.7"
   }

@@ -1,4 +1,4 @@
-FROM okteto/node:14
+FROM okteto/node:16.13.0
 
 WORKDIR /app
 COPY package.json package-lock.json ./

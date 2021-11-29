@@ -1,4 +1,5 @@
 name: orders
+image: okteto/node:16
 command: bash
 sync:
 - .:/usr/src/app

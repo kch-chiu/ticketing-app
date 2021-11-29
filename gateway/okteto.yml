@@ -4,7 +4,7 @@ command: bash
 sync:
 - .:/usr/src/app
 environment:
-  - NODE_AUTH_TOKEN=
+  NODE_AUTH_TOKEN:
 forward:
 - 4000:4000
 - 9300:9300

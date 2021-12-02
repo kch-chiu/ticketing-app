@@ -57,6 +57,13 @@ spec:
           - |
             set -ex
             dgraph zero --my=$(hostname -f):5080
+        resources:
+          requests:
+            memory: '400Mi'
+            cpu: '200m'
+          limits:
+            memory: '800Mi'
+            cpu: '400m'
       - name: alpha
         image: dgraph/dgraph:v21.03.0
         imagePullPolicy: IfNotPresent
@@ -84,6 +91,13 @@ spec:
           - |
             set -ex
             dgraph alpha --my=$(hostname -f):7080 --zero dgraph-0.dgraph.${POD_NAMESPACE}.svc.cluster.local:5080
+        resources:
+          requests:
+            memory: '400Mi'
+            cpu: '200m'
+          limits:
+            memory: '800Mi'
+            cpu: '400m'
       terminationGracePeriodSeconds: 60
       volumes:
       - name: datadir

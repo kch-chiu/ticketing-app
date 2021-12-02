@@ -63,11 +63,11 @@ spec:
                   key: stripe-callback-url-cancel
           resources:
             requests:
-              memory: '125Mi'
-              cpu: '100m'
-            limits:
-              memory: '250Mi'
+              memory: '400Mi'
               cpu: '200m'
+            limits:
+              memory: '800Mi'
+              cpu: '400m'
   strategy:
     type: Recreate
 ---

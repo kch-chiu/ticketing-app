@@ -68,11 +68,11 @@ spec:
                   key: client-stripe-pub
           resources:
             requests:
-              memory: '250Mi'
-              cpu: '125m'
+              memory: '400Mi'
+              cpu: '200m'
             limits:
-              memory: '500Mi'
-              cpu: '250m'
+              memory: '800Mi'
+              cpu: '400m'
   strategy:
     type: Recreate
 ---

@@ -29,6 +29,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:buildcache,mode=max
 
       - name: Build and push orders
         uses: docker/build-push-action@v2
@@ -37,6 +39,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:buildcache,mode=max
 
       - name: Build and push payments
         uses: docker/build-push-action@v2
@@ -45,6 +49,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:buildcache,mode=max
 
       - name: Build and push gateway
         uses: docker/build-push-action@v2
@@ -53,6 +59,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:buildcache,mode=max
 
       - name: Build and push gateway-dgraph
         uses: docker/build-push-action@v2
@@ -61,6 +69,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway-dgraph:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway-dgraph:buildcache,mode=max
 
       - name: Login to Okteto Cloud
         uses: okteto/login@master

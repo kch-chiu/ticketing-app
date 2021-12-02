@@ -24,10 +24,10 @@ spec:
           resources:
             requests:
               memory: '400Mi'
-              cpu: '200m'
+              cpu: '250m'
             limits:
               memory: '800Mi'
-              cpu: '400m'
+              cpu: '500m'
       # initContainers:
       #   - name: orders-wait-for-gateway-dgraph
       #     image: curlimages/curl:latest

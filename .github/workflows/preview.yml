@@ -16,13 +16,45 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Cache Docker layers
+      - name: Cache tickets image layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          path: /tmp/.buildx-tickets-cache
+          key: ${{ runner.os }}-buildx-tickets-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-buildx-tickets-
+
+      - name: Cache orders image layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-orders-cache
+          key: ${{ runner.os }}-buildx-orders-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-orders-
+      
+      - name: Cache payments image layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-payments-cache
+          key: ${{ runner.os }}-buildx-payments-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-payments-
+      
+      - name: Cache gateway image layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-gateway-cache
+          key: ${{ runner.os }}-buildx-gateway-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-gateway-
+
+      - name: Cache gateway-dgraph image layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-gateway-dgraph-cache
+          key: ${{ runner.os }}-buildx-gateway-dgraph-${{ github.sha }}
+          restore-kjeys: |
+            ${{ runner.os }}-buildx-gateway-dgraph-
 
       - name: Login to Okteto Registry
         uses: docker/login-action@v1
@@ -32,7 +64,6 @@ jobs:
           password: ${{ secrets.OKTETO_TOKEN }}
 
       - name: Build and push tickets
-        id: docker_build_tickets
         uses: docker/build-push-action@v2
         with:
           context: tickets
@@ -41,14 +72,10 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-
-      - name: Digest for tickets image
-        run: echo ${{ steps.docker_build_tickets.outputs.digest }}
+          cache-from: type=local,src=/tmp/.buildx-tickets-cache
+          cache-to: type=local,dest=/tmp/.buildx-tickets-cache,mode=max
         
       - name: Build and push orders
-        id: docker_build_orders
         uses: docker/build-push-action@v2
         with:
           context: orders
@@ -57,14 +84,10 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-
-      - name: Digest for orders image
-        run: echo ${{ steps.docker_build_orders.outputs.digest }}
+          cache-from: type=local,src=/tmp/.buildx-orders-cache
+          cache-to: type=local,dest=/tmp/.buildx-orders-cache,mode=max
 
       - name: Build and push payments
-        id: docker_build_payments
         uses: docker/build-push-action@v2
         with:
           context: payments
@@ -73,14 +96,10 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-
-      - name: Digest for payments image
-        run: echo ${{ steps.docker_build_payments.outputs.digest }}
+          cache-from: type=local,src=/tmp/.buildx-payments-cache
+          cache-to: type=local,dest=/tmp/.buildx-payments-cache,mode=max
 
       - name: Build and push gateway
-        id: docker_build_gateway
         uses: docker/build-push-action@v2
         with:
           context: gateway
@@ -89,14 +108,10 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-
-      - name: Digest for gateway image
-        run: echo ${{ steps.docker_build_gateway.outputs.digest }}
+          cache-from: type=local,src=/tmp/.buildx-gateway-cache
+          cache-to: type=local,dest=/tmp/.buildx-gateway-cache,mode=max
 
       - name: Build and push gateway-dgraph
-        id: docker_build_gateway-dgraph
         uses: docker/build-push-action@v2
         with:
           context: gateway-dgraph
@@ -105,11 +120,8 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-
-      - name: Digest for gateway-dgraph image
-        run: echo ${{ steps.docker_build_gateway-dgraph.outputs.digest }}
+          cache-from: type=local,src=/tmp/.buildx-gateway-dgraph-cache
+          cache-to: type=local,dest=/tmp/.buildx-gateway-dgraph-cache,mode=max
 
       - name: Login to Okteto Cloud
         uses: okteto/login@master

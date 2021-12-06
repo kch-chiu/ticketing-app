@@ -53,7 +53,7 @@ jobs:
         with:
           path: /tmp/.buildx-gateway-dgraph-cache
           key: ${{ runner.os }}-buildx-gateway-dgraph-${{ github.sha }}
-          restore-kjeys: |
+          restore-keys: |
             ${{ runner.os }}-buildx-gateway-dgraph-
 
       - name: Login to Okteto Registry

@@ -42,12 +42,10 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Digest for tickets image
+        run: echo ${{ steps.docker_build_tickets.outputs.digest }}
         
       - name: Build and push orders
         id: docker_build_orders
@@ -60,12 +58,10 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Digest for orders image
+        run: echo ${{ steps.docker_build_orders.outputs.digest }}
 
       - name: Build and push payments
         id: docker_build_payments
@@ -78,12 +74,10 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Digest for payments image
+        run: echo ${{ steps.docker_build_payments.outputs.digest }}
 
       - name: Build and push gateway
         id: docker_build_gateway
@@ -96,15 +90,13 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Digest for gateway image
+        run: echo ${{ steps.docker_build_gateway.outputs.digest }}
 
       - name: Build and push gateway-dgraph
-        id: docker_build_gateway_dgraph
+        id: docker_build_gateway-dgraph
         uses: docker/build-push-action@v2
         with:
           context: gateway-dgraph
@@ -114,12 +106,10 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Digest for gateway-dgraph image
+        run: echo ${{ steps.docker_build_gateway-dgraph.outputs.digest }}
 
       - name: Login to Okteto Cloud
         uses: okteto/login@master

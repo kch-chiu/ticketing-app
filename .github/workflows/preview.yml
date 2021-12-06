@@ -13,6 +13,7 @@ jobs:
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
+        id: buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
@@ -31,6 +32,7 @@ jobs:
           password: ${{ secrets.OKTETO_TOKEN }}
 
       - name: Build and push tickets
+        id: docker_build_tickets
         uses: docker/build-push-action@v2
         with:
           context: tickets
@@ -48,6 +50,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
         
       - name: Build and push orders
+        id: docker_build_orders
         uses: docker/build-push-action@v2
         with:
           context: orders
@@ -65,6 +68,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Build and push payments
+        id: docker_build_payments
         uses: docker/build-push-action@v2
         with:
           context: payments
@@ -82,6 +86,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Build and push gateway
+        id: docker_build_gateway
         uses: docker/build-push-action@v2
         with:
           context: gateway
@@ -99,6 +104,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Build and push gateway-dgraph
+        id: docker_build_gateway_dgraph
         uses: docker/build-push-action@v2
         with:
           context: gateway-dgraph

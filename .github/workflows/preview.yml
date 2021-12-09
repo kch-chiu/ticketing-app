@@ -44,8 +44,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/tickets:latest
           #cache-from: type=local,src=/tmp/.buildx-cache
           #cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          cache-from: type=gha, scope=${{ github.workflow }}
-          cache-to: type=gha, scope=${{ github.workflow }}
+          cache-from: type=gha,scope=tickets
+          cache-to: type=gha,scope=tickets,mode=max
 
       - name: Build and push orders
         uses: docker/build-push-action@v2
@@ -58,8 +58,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/orders:latest
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          cache-from: type=gha, scope=${{ github.workflow }}
-          cache-to: type=gha, scope=${{ github.workflow }}
+          cache-from: type=gha,scope=orders
+          cache-to: type=gha,scope=orders,mode=max
           
       - name: Build and push payments
         uses: docker/build-push-action@v2
@@ -72,8 +72,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/payments:latest
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          cache-from: type=gha, scope=${{ github.workflow }}
-          cache-to: type=gha, scope=${{ github.workflow }}
+          cache-from: type=gha,scope=payments
+          cache-to: type=gha,scope=payments,mode=max
 
       - name: Build and push gateway
         uses: docker/build-push-action@v2
@@ -86,8 +86,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/gateway:latest
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          cache-from: type=gha, scope=${{ github.workflow }}
-          cache-to: type=gha, scope=${{ github.workflow }}
+          cache-from: type=gha,scope=gateway
+          cache-to: type=gha,scope=gateway,mode=max
 
       - name: Build and push gateway-dgraph
         uses: docker/build-push-action@v2
@@ -100,8 +100,8 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:latest
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          cache-from: type=gha, scope=${{ github.workflow }}
-          cache-to: type=gha, scope=${{ github.workflow }}
+          cache-from: type=gha,scope=gateway-dgraph
+          cache-to: type=gha,scope=gateway-dgraph,mode=max
 
       # - name: Move cache
       #   run: |

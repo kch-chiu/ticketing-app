@@ -4,6 +4,7 @@ ARG NODE_AUTH_TOKEN
 WORKDIR /app
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
+COPY .npmrc /app/.npmrc
 
 RUN npm ci --production
 RUN rm -f .npmrc

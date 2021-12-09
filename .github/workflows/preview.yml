@@ -75,7 +75,7 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Move cache
         run: |
@@ -92,7 +92,7 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Move cache
         run: |
@@ -109,7 +109,7 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway-dgraph:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Move cache
         run: |

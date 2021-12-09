@@ -42,11 +42,6 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-        
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Build and push orders
         uses: docker/build-push-action@v2
@@ -59,11 +54,6 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
           
       - name: Build and push payments
         uses: docker/build-push-action@v2
@@ -77,11 +67,6 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
       - name: Build and push gateway
         uses: docker/build-push-action@v2
         with:
@@ -93,11 +78,6 @@ jobs:
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Build and push gateway-dgraph
         uses: docker/build-push-action@v2

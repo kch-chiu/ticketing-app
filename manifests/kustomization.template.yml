@@ -8,7 +8,7 @@ resources:
   - ingress.yml
   - gateway.yml
   - dgraph.yml
-  - dgraph-gateway.yml
+  - dgraph-api.yml
 
 configMapGenerator:
   - name: client-config

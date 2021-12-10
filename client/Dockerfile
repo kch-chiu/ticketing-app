@@ -10,4 +10,4 @@ COPY hooks /app/hooks
 COPY pages /app/pages
 COPY ssr /app/ssr
 
-ENTRYPOINT ["npm", "start"]
+CMD ["npm", "start"]

@@ -9,4 +9,4 @@ RUN rm -f .npmrc
 
 COPY src /app/src
 
-ENTRYPOINT ["npm", "start"]
+CMD ["npm", "start"]

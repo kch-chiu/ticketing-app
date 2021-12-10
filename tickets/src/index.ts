@@ -8,7 +8,7 @@ const start = async () => {
   const { DGRAPH_API_URL } = process.env;
 
   if (_.isEmpty(DGRAPH_API_URL))
-    throw new Error("GATEWAY_API_URL must be defined");
+    throw new Error("DGRAPH_API_URL must be defined");
 
   try {
     graphQLClientWrapper.connect(DGRAPH_API_URL!);

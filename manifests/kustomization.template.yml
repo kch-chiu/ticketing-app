@@ -24,7 +24,7 @@ configMapGenerator:
     literals:
       - apollo-graph-ref=ticketing-gateway@current
       - node-env=production
-      - dgraphgateway-url=http://gateway-srv:4000/graphql
+      - gateway-url=http://gateway-srv:4000/graphql
   - name: payments-config
     literals:
       - stripe-api-version=2020-8-27

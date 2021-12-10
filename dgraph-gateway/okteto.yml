@@ -1,4 +1,4 @@
-name: gateway-dgraph
+name: dgraph-gateway
 image: okteto/node:16
 command: bash
 sync:

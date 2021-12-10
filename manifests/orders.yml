@@ -16,11 +16,11 @@ spec:
         - name: orders
           image: okteto/orders:buildTag
           env:
-            - name: GATEWAY_DGRAPH_URL
+            - name: DGRAPH_GATEWAY_URL
               valueFrom:
                 configMapKeyRef:
-                  name: gateway-dgraph-config
-                  key: gateway-dgraph-url
+                  name: dgraph-gateway-config
+                  key: dgraph-gateway-url
           resources:
             requests:
               memory: '400Mi'

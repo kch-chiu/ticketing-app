@@ -5,13 +5,13 @@ import _ from 'lodash';
 const start = async () => {
   console.log("Starting.............");
 
-  const { GATEWAY_DGRAPH_URL } = process.env;
+  const { DGRAPH_GATEWAY_URL } = process.env;
 
-  if (_.isEmpty(GATEWAY_DGRAPH_URL))
+  if (_.isEmpty(DGRAPH_GATEWAY_URL))
     throw new Error("GATEWAY_DGRAPH_URL must be defined");
 
   try {
-    graphQLClientWrapper.connect(GATEWAY_DGRAPH_URL!);
+    graphQLClientWrapper.connect(DGRAPH_GATEWAY_URL!);
     console.log("Connected to Dgraph");
   } catch (err) {
     console.error(err);

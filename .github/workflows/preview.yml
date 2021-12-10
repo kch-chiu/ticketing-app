@@ -55,14 +55,14 @@ jobs:
           path: gateway
           buildargs: NODE_AUTH_TOKEN
 
-      - name: Build and push gateway-dgraph
+      - name: Build and push dgraph-gateway
         uses: okteto/build@latest
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
-          tag: okteto.dev/gateway-dgraph:${{ github.sha }}
-          file: gateway-dgraph/Dockerfile
-          path: gateway-dgraph
+          tag: okteto.dev/dgraph-gateway:${{ github.sha }}
+          file: dgraph-gateway/Dockerfile
+          path: dgraph-gateway
           buildargs: NODE_AUTH_TOKEN
 
       - name: Trigger the pipeline
@@ -76,7 +76,7 @@ jobs:
           APOLLO_KEY: ${{ secrets.TICKETING_GATEWAY_DGRAPH_KEY }}
         run: |
           npx -p @apollo/rover \
-            rover subgraph publish ticketing-gateway-dgraph-ex1l5e \
+            rover subgraph publish ticketing-dgraph-gateway-ex1l5e \
             --routing-url http://dgraph-srv:8080/graphql \
             --schema dgraph/schema.graphql \
             --name dgraph \

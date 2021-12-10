@@ -16,11 +16,11 @@ spec:
         - name: tickets
           image: okteto/tickets:buildTag
           env:
-            - name: DGRAPH_GATEWAY_URL
+            - name: DGRAPH_API_URL
               valueFrom:
                 configMapKeyRef:
-                  name: dgraph-gateway-config
-                  key: dgraph-gateway-url
+                  name: dgraph-api-config
+                  key: dgraph-api-url
           resources:
             requests:
               memory: '400Mi'

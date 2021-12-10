@@ -24,7 +24,7 @@ configMapGenerator:
     literals:
       - apollo-graph-ref=ticketing-gateway@current
       - node-env=production
-      - dgraph-gateway-url=http://gateway-srv:4000/graphql
+      - dgraphgateway-url=http://gateway-srv:4000/graphql
   - name: payments-config
     literals:
       - stripe-api-version=2020-8-27
@@ -34,11 +34,11 @@ configMapGenerator:
       - stripe-callback-url=https://ticketing-app-kch-chiu.cloud.okteto.net/orders
       - stripe-callback-url-success=success
       - stripe-callback-url-cancel=cancel
-  - name: dgraph-gateway-config
+  - name: dgraph-api-config
     literals:
-      - apollo-graph-ref=ticketing-dgraph-gateway-ex1l5e@current
+      - apollo-graph-ref=ticketing-dgraph-api@current
       - node-env=production
-      - dgraph-gateway-url=http://dgraph-gateway-srv:5000/graphql
+      - dgraph-api-url=http://dgraph-api-srv:5000/graphql
   - name: dgraph-config
     literals:
       - dgraph-alpha-security=whitelist=0.0.0.0/0
@@ -56,9 +56,9 @@ secretGenerator:
   - name: ticketing-gateway-key
     literals:
       - ticketing-gateway-key=$TICKETING_GATEWAY_KEY
-  - name: ticketing-dgraph-gateway-key
+  - name: ticketing-dgraph-api-key
     literals:
-      - ticketing-dgraph-gateway-key=$TICKETING_GATEWAY_DGRAPH_KEY
+      - ticketing-dgraph-api-key=$TICKETING_DGRAPH_API_KEY
 
 generatorOptions:
   disableNameSuffixHash: true

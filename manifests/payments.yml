@@ -16,11 +16,11 @@ spec:
         - name: payments
           image: okteto/payments:buildTag
           env:
-            - name: DGRAPH_GATEWAY_URL
+            - name: DGRAPH_API_URL
               valueFrom:
                 configMapKeyRef:
-                  name: dgraph-gateway-config
-                  key: dgraph-gateway-url
+                  name: dgraph-api-config
+                  key: dgraph-api-url
             - name: STRIPE_KEY
               valueFrom:
                 secretKeyRef:

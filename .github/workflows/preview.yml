@@ -21,7 +21,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/tickets:${{ github.sha }}
-          path: tickets
+          file: tickets/Dockerfile
           buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push orders
@@ -30,7 +30,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/orders:${{ github.sha }}
-          path: orders
+          file: orders/Dockerfile
           buildargs: NODE_AUTH_TOKEN
           
       - name: Build and push payments
@@ -39,7 +39,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/payments:${{ github.sha }}
-          path: payments
+          file: payments/Dockerfile
           buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push gateway
@@ -48,7 +48,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/gateway:${{ github.sha }}
-          path: gateway
+          file: gateway/Dockerfile
           buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push gateway-dgraph
@@ -57,7 +57,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/gateway-dgraph:${{ github.sha }}
-          path: gateway-dgraph
+          file: gateway-dgraph/Dockerfile
           buildargs: NODE_AUTH_TOKEN
 
       - name: Trigger the pipeline

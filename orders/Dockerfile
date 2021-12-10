@@ -2,13 +2,11 @@ FROM node:16.13.0-alpine
 
 ARG NODE_AUTH_TOKEN
 WORKDIR /app
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
-COPY .npmrc /app/.npmrc
+COPY package.json package-lock.json .npmrc /app/
 
 RUN npm ci --production
 RUN rm -f .npmrc
 
-COPY . /app
+COPY src /app/src
 
 ENTRYPOINT ["npm", "start"]

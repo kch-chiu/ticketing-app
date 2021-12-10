@@ -15,6 +15,16 @@ jobs:
           token: ${{ secrets.OKTETO_TOKEN }}
           namespace: kch-chiu
 
+      - name: Build and push dgraph-api
+        uses: okteto/build@latest
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        with:
+          tag: okteto.dev/dgraph-api:${{ github.sha }}
+          file: dgraph-api/Dockerfile
+          path: dgraph-api
+          buildargs: NODE_AUTH_TOKEN
+
       - name: Build and push tickets
         uses: okteto/build@latest
         env:
@@ -53,16 +63,6 @@ jobs:
           tag: okteto.dev/gateway:${{ github.sha }}
           file: gateway/Dockerfile
           path: gateway
-          buildargs: NODE_AUTH_TOKEN
-
-      - name: Build and push dgraph-api
-        uses: okteto/build@latest
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
-        with:
-          tag: okteto.dev/dgraph-api:${{ github.sha }}
-          file: dgraph-api/Dockerfile
-          path: dgraph-api
           buildargs: NODE_AUTH_TOKEN
 
       - name: Trigger the pipeline

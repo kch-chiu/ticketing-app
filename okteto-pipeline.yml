@@ -1,8 +1,8 @@
 deploy:
   - envsubst < manifests/kustomization.template.yml > manifests/kustomization.yml
-  - cd manifests && kustomize edit set image okteto/tickets:buildTag=registry.cloud.okteto.net/kch-chiu/tickets:latest
-  - cd manifests && kustomize edit set image okteto/orders:buildTag=registry.cloud.okteto.net/kch-chiu/orders:latest
-  - cd manifests && kustomize edit set image okteto/payments:buildTag=registry.cloud.okteto.net/kch-chiu/payments:latest
-  - cd manifests && kustomize edit set image okteto/gateway:buildTag=registry.cloud.okteto.net/kch-chiu/gateway:latest
-  - cd manifests && kustomize edit set image okteto/gateway-dgraph:buildTag=registry.cloud.okteto.net/kch-chiu/gateway-dgraph:latest
+  - cd manifests && kustomize edit set image okteto/tickets:buildTag=okteto.dev/tickets:$OKTETO_GIT_COMMIT
+  - cd manifests && kustomize edit set image okteto/orders:buildTag=okteto.dev/orders:$OKTETO_GIT_COMMIT
+  - cd manifests && kustomize edit set image okteto/payments:buildTag=okteto.dev/payments:$OKTETO_GIT_COMMIT
+  - cd manifests && kustomize edit set image okteto/gateway:buildTag=okteto.dev/gateway:$OKTETO_GIT_COMMIT
+  - cd manifests && kustomize edit set image okteto/gateway-dgraph:buildTag=okteto.dev/gateway-dgraph:$OKTETO_GIT_COMMIT
   - kustomize build manifests | kubectl apply -f -

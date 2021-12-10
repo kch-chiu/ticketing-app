@@ -13,6 +13,7 @@ jobs:
         uses: okteto/context@latest
         with:
           token: ${{ secrets.OKTETO_TOKEN }}
+          namespace: kch-chiu
 
       - name: Build and push tickets
         uses: okteto/build@latest
@@ -20,7 +21,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/tickets:${{ github.sha }}
-          path: ./tickets
+          path: tickets
           buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push orders
@@ -29,7 +30,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/orders:${{ github.sha }}
-          path: ./orders
+          path: orders
           buildargs: NODE_AUTH_TOKEN
           
       - name: Build and push payments
@@ -38,7 +39,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/payments:${{ github.sha }}
-          path: ./payments
+          path: payments
           buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push gateway
@@ -47,7 +48,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/gateway:${{ github.sha }}
-          path: ./gateway
+          path: gateway
           buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push gateway-dgraph
@@ -56,7 +57,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
         with:
           tag: okteto.dev/gateway-dgraph:${{ github.sha }}
-          path: ./gateway-dgraph
+          path: gateway-dgraph
           buildargs: NODE_AUTH_TOKEN
 
       - name: Trigger the pipeline

@@ -32,7 +32,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: okteto.dev/dgraph-api:${{ github.sha }}
+          tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
           cache-from: type=gha,scope=dgraph-api
           cache-to: type=gha,scope=dgraph-api,mode=max
 
@@ -54,7 +54,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: okteto.dev/tickets:${{ github.sha }}
+          tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           cache-from: type=gha,scope=tickets
           cache-to: type=gha,scope=tickets,mode=max
 
@@ -76,7 +76,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: okteto.dev/orders:${{ github.sha }}
+          tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           cache-from: type=gha,scope=orders
           cache-to: type=gha,scope=orders,mode=max
 
@@ -98,7 +98,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: okteto.dev/payments:${{ github.sha }}
+          tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           cache-from: type=gha,scope=payments
           cache-to: type=gha,scope=payments,mode=max
           
@@ -120,7 +120,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: okteto.dev/gateway:${{ github.sha }}
+          tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           cache-from: type=gha,scope=gateway
           cache-to: type=gha,scope=gateway,mode=max
 

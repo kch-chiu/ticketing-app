@@ -1,14 +1,12 @@
-FROM node:16.13.0
-
+FROM node:16.13.0-alpine as builder
 ARG NODE_AUTH_TOKEN
-ENV CI=true
-
-WORKDIR /app
-COPY package.json package-lock.json .npmrc tsconfig.json /app/
-
-RUN npm ci
+WORKDIR /usr/src/app
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci --production
 RUN rm -f .npmrc
 
-COPY src /app/src
-
+FROM node:16.13.0-alpine
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app/ /usr/src/app/
+COPY . .
 CMD ["npm", "start"]

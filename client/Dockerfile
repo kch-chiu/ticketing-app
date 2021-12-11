@@ -1,15 +1,11 @@
-FROM node:16.13.0
+FROM node:16.13.0-alpine as builder
+ARG NODE_AUTH_TOKEN
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm ci --production
 
-ENV CI=true
-
-WORKDIR /app
-COPY package.json package-lock.json /app/
-
-RUN npm ci
-
-COPY components /app/components
-COPY hooks /app/hooks
-COPY pages /app/pages
-COPY ssr /app/ssr
-
+FROM node:16.13.0-alpine
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app/ /usr/src/app/
+COPY . .
 CMD ["npm", "start"]

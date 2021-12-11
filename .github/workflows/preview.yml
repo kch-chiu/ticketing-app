@@ -34,8 +34,8 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
-          cache-from: type=gha,scope=dgraph-api
-          cache-to: type=gha,scope=dgraph-api,mode=max
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/dgraph-api:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/dgraph-api:buildcache,mode=max
 
       # - name: Build and push dgraph-api
       #   uses: okteto/build@latest
@@ -56,8 +56,8 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
-          cache-from: type=gha,scope=payments
-          cache-to: type=gha,scope=payments,mode=max
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:buildcache,mode=max
           
       # - name: Build and push payments
       #   uses: okteto/build@latest
@@ -78,8 +78,8 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
-          cache-from: type=gha,scope=orders
-          cache-to: type=gha,scope=orders,mode=max
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:buildcache,mode=max
 
       # - name: Build and push orders
       #   uses: okteto/build@latest
@@ -100,8 +100,8 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
-          cache-from: type=gha,scope=tickets
-          cache-to: type=gha,scope=tickets,mode=max
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:buildcache,mode=max
 
       # - name: Build and push tickets
       #   uses: okteto/build@latest
@@ -122,8 +122,8 @@ jobs:
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
-          cache-from: type=gha,scope=gateway
-          cache-to: type=gha,scope=gateway,mode=max
+          cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:buildcache
+          cache-to: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:buildcache,mode=max
 
       # - name: Build and push gateway
       #   uses: okteto/build@latest

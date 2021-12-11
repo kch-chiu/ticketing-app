@@ -1,11 +1,9 @@
 FROM node:16.13.0
 
-ENV CI=true
-
 WORKDIR /app
 COPY package.json package-lock.json /app/
 
-RUN npm ci
+RUN npm ci --production
 
 COPY components /app/components
 COPY hooks /app/hooks

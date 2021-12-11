@@ -1,12 +1,11 @@
 FROM node:16.13.0
 
 ARG NODE_AUTH_TOKEN
-ENV CI=true
 
 WORKDIR /app
 COPY package.json package-lock.json .npmrc tsconfig.json /app/
 
-RUN npm ci
+RUN npm ci --production
 RUN rm -f .npmrc
 
 COPY src /app/src

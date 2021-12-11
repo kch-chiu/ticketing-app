@@ -9,6 +9,15 @@ jobs:
       - name: checkout
         uses: actions/checkout@master
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+        with:
+          version: v0.6.3
+      
       - name: Login to Okteto Cloud
         uses: okteto/context@latest
         with:
@@ -16,54 +25,114 @@ jobs:
           namespace: kch-chiu
 
       - name: Build and push dgraph-api
-        uses: okteto/build@latest
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+        uses: docker/build-push-action@v2
         with:
-          tag: okteto.dev/dgraph-api:${{ github.sha }}
+          context: dgraph-api
           file: dgraph-api/Dockerfile
-          path: dgraph-api
-          buildargs: NODE_AUTH_TOKEN
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          push: true
+          tags: okteto.dev/dgraph-api:${{ github.sha }}
+          cache-from: type=gha,scope=dgraph-api
+          cache-to: type=gha,scope=dgraph-api,mode=max
+
+      # - name: Build and push dgraph-api
+      #   uses: okteto/build@latest
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ github.token }}
+      #   with:
+      #     tag: okteto.dev/dgraph-api:${{ github.sha }}
+      #     file: dgraph-api/Dockerfile
+      #     path: dgraph-api
+      #     buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push tickets
-        uses: okteto/build@latest
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+        uses: docker/build-push-action@v2
         with:
-          tag: okteto.dev/tickets:${{ github.sha }}
+          context: tickets
           file: tickets/Dockerfile
-          path: tickets
-          buildargs: NODE_AUTH_TOKEN
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          push: true
+          tags: okteto.dev/tickets:${{ github.sha }}
+          cache-from: type=gha,scope=tickets
+          cache-to: type=gha,scope=tickets,mode=max
+
+      # - name: Build and push tickets
+      #   uses: okteto/build@latest
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ github.token }}
+      #   with:
+      #     tag: okteto.dev/tickets:${{ github.sha }}
+      #     file: tickets/Dockerfile
+      #     path: tickets
+      #     buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push orders
-        uses: okteto/build@latest
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+        uses: docker/build-push-action@v2
         with:
-          tag: okteto.dev/orders:${{ github.sha }}
+          context: orders
           file: orders/Dockerfile
-          path: orders
-          buildargs: NODE_AUTH_TOKEN
-          
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          push: true
+          tags: okteto.dev/orders:${{ github.sha }}
+          cache-from: type=gha,scope=orders
+          cache-to: type=gha,scope=orders,mode=max
+
+      # - name: Build and push orders
+      #   uses: okteto/build@latest
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ github.token }}
+      #   with:
+      #     tag: okteto.dev/orders:${{ github.sha }}
+      #     file: orders/Dockerfile
+      #     path: orders
+      #     buildargs: NODE_AUTH_TOKEN
+
       - name: Build and push payments
-        uses: okteto/build@latest
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+        uses: docker/build-push-action@v2
         with:
-          tag: okteto.dev/payments:${{ github.sha }}
+          context: payments
           file: payments/Dockerfile
-          path: payments
-          buildargs: NODE_AUTH_TOKEN
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          push: true
+          tags: okteto.dev/payments:${{ github.sha }}
+          cache-from: type=gha,scope=payments
+          cache-to: type=gha,scope=payments,mode=max
+          
+      # - name: Build and push payments
+      #   uses: okteto/build@latest
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ github.token }}
+      #   with:
+      #     tag: okteto.dev/payments:${{ github.sha }}
+      #     file: payments/Dockerfile
+      #     path: payments
+      #     buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push gateway
-        uses: okteto/build@latest
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+        uses: docker/build-push-action@v2
         with:
-          tag: okteto.dev/gateway:${{ github.sha }}
+          context: gateway
           file: gateway/Dockerfile
-          path: gateway
-          buildargs: NODE_AUTH_TOKEN
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          push: true
+          tags: okteto.dev/gateway:${{ github.sha }}
+          cache-from: type=gha,scope=gateway
+          cache-to: type=gha,scope=gateway,mode=max
+
+      # - name: Build and push gateway
+      #   uses: okteto/build@latest
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ github.token }}
+      #   with:
+      #     tag: okteto.dev/gateway:${{ github.sha }}
+      #     file: gateway/Dockerfile
+      #     path: gateway
+      #     buildargs: NODE_AUTH_TOKEN
 
       - name: Trigger the pipeline
         uses: okteto/pipeline@master

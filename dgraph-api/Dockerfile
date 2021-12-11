@@ -7,6 +7,6 @@ COPY package.json package-lock.json .npmrc /app/
 RUN npm ci --production
 RUN rm -f .npmrc
 
-COPY src /app/src
+COPY src /app
 
 CMD ["npm", "start"]

@@ -5,9 +5,6 @@ COPY package.json package-lock.json /app/
 
 RUN npm ci --production
 
-COPY components /app/components
-COPY hooks /app/hooks
-COPY pages /app/pages
-COPY ssr /app/ssr
+COPY components hooks pages ssr /app/
 
 CMD ["npm", "start"]

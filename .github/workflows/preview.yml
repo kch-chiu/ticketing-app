@@ -18,7 +18,6 @@ jobs:
         with:
           version: v0.6.3
       
-
       - name: Login to Okteto Registry
         uses: docker/login-action@v1
         with:
@@ -48,26 +47,26 @@ jobs:
       #     path: dgraph-api
       #     buildargs: NODE_AUTH_TOKEN
 
-      - name: Build and push tickets
+      - name: Build and push payments
         uses: docker/build-push-action@v2
         with:
-          context: tickets
-          file: tickets/Dockerfile
+          context: payments
+          file: payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
-          cache-from: type=gha,scope=tickets
-          cache-to: type=gha,scope=tickets,mode=max
-
-      # - name: Build and push tickets
+          tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
+          cache-from: type=gha,scope=payments
+          cache-to: type=gha,scope=payments,mode=max
+          
+      # - name: Build and push payments
       #   uses: okteto/build@latest
       #   env:
       #     NODE_AUTH_TOKEN: ${{ github.token }}
       #   with:
-      #     tag: okteto.dev/tickets:${{ github.sha }}
-      #     file: tickets/Dockerfile
-      #     path: tickets
+      #     tag: okteto.dev/payments:${{ github.sha }}
+      #     file: payments/Dockerfile
+      #     path: payments
       #     buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push orders
@@ -92,26 +91,26 @@ jobs:
       #     path: orders
       #     buildargs: NODE_AUTH_TOKEN
 
-      - name: Build and push payments
+      - name: Build and push tickets
         uses: docker/build-push-action@v2
         with:
-          context: payments
-          file: payments/Dockerfile
+          context: tickets
+          file: tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
-          tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
-          cache-from: type=gha,scope=payments
-          cache-to: type=gha,scope=payments,mode=max
-          
-      # - name: Build and push payments
+          tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
+          cache-from: type=gha,scope=tickets
+          cache-to: type=gha,scope=tickets,mode=max
+
+      # - name: Build and push tickets
       #   uses: okteto/build@latest
       #   env:
       #     NODE_AUTH_TOKEN: ${{ github.token }}
       #   with:
-      #     tag: okteto.dev/payments:${{ github.sha }}
-      #     file: payments/Dockerfile
-      #     path: payments
+      #     tag: okteto.dev/tickets:${{ github.sha }}
+      #     file: tickets/Dockerfile
+      #     path: tickets
       #     buildargs: NODE_AUTH_TOKEN
 
       - name: Build and push gateway

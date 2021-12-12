@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm ci --production
 
-FROM node:16.13.0-alpine
+FROM node:16.13.0-alpine as runner
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/ /usr/src/app/
 COPY . .

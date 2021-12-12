@@ -1,9 +1,9 @@
 FROM node:16.13.0-alpine AS base
-ARG NODE_AUTH_TOKEN
 WORKDIR /usr/src/payments
 COPY package.json package-lock.json .npmrc ./
 
 FROM base AS builder
+ARG NODE_AUTH_TOKEN
 RUN npm ci --production
 RUN rm -f .npmrc
 

@@ -31,7 +31,6 @@ jobs:
           context: ./dgraph-api
           file: ./dgraph-api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: base
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:base
@@ -44,6 +43,7 @@ jobs:
           context: ./dgraph-api
           file: ./dgraph-api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:builder
@@ -83,7 +83,6 @@ jobs:
           context: ./payments
           file: ./payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: base
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:base
@@ -96,6 +95,7 @@ jobs:
           context: ./payments
           file: ./payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:builder
@@ -135,7 +135,6 @@ jobs:
           context: ./orders
           file: ./orders/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: base
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:base
@@ -148,6 +147,7 @@ jobs:
           context: ./orders
           file: ./orders/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:builder
@@ -187,7 +187,6 @@ jobs:
           context: ./tickets
           file: ./tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: base
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:base
@@ -200,6 +199,7 @@ jobs:
           context: ./tickets
           file: ./tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:builder
@@ -239,7 +239,6 @@ jobs:
           context: ./gateway
           file: ./gateway/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: base
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:base
@@ -252,6 +251,7 @@ jobs:
           context: ./gateway
           file: ./gateway/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:builder

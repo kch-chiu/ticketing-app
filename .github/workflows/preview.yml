@@ -58,6 +58,7 @@ jobs:
           context: ./dgraph-api
           file: ./dgraph-api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
@@ -110,6 +111,7 @@ jobs:
           context: ./payments
           file: ./payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
@@ -162,6 +164,7 @@ jobs:
           context: ./orders
           file: ./orders/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
@@ -214,6 +217,7 @@ jobs:
           context: ./tickets
           file: ./tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
@@ -266,6 +270,7 @@ jobs:
           context: ./gateway
           file: ./gateway/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}

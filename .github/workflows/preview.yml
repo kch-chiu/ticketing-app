@@ -31,13 +31,12 @@ jobs:
           context: ./dgraph-api
           file: ./dgraph-api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            NODE_AUTH_TOKEN=${{ github.token }}
-            BUILDKIT_INLINE_CACHE=1
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:builder
           cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/dgraph-api:builder
+          cache-to: type=inline
 
       - name: Build and push dgraph-api runner
         uses: docker/build-push-action@v2
@@ -45,13 +44,13 @@ jobs:
           context: ./dgraph-api
           file: ./dgraph-api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: BUILDKIT_INLINE_CACHE=1
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
           cache-from: |
-            registry.cloud.okteto.net/kch-chiu/dgraph-api:builder
-            registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/dgraph-api:builder
+            type=registry.ref=registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
+          cache-to: type=inline
 
       # - name: Build and push dgraph-api
       #   uses: okteto/build@latest
@@ -69,28 +68,27 @@ jobs:
           context: ./payments
           file: ./payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            NODE_AUTH_TOKEN=${{ github.token }}
-            BUILDKIT_INLINE_CACHE=1
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:builder
           cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:builder
-      
+          cache-to: type=inline
+
       - name: Build and push payments runner
         uses: docker/build-push-action@v2
         with:
           context: ./payments
           file: ./payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: BUILDKIT_INLINE_CACHE=1
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           cache-from: |
-            registry.cloud.okteto.net/kch-chiu/payments:builder
-            registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
-          
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:builder
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
+          cache-to: type=inline
+
       # - name: Build and push payments
       #   uses: okteto/build@latest
       #   env:
@@ -107,13 +105,12 @@ jobs:
           context: ./orders
           file: ./orders/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            NODE_AUTH_TOKEN=${{ github.token }}
-            BUILDKIT_INLINE_CACHE=1
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:builder
           cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:builder
+          cache-to: type=inline
 
       - name: Build and push orders runner
         uses: docker/build-push-action@v2
@@ -121,13 +118,13 @@ jobs:
           context: ./orders
           file: ./orders/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: BUILDKIT_INLINE_CACHE=1
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           cache-from: |
-            registry.cloud.okteto.net/kch-chiu/orders:builder
-            registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:builder
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
+          cache-to: type=inline
 
       # - name: Build and push orders
       #   uses: okteto/build@latest
@@ -145,13 +142,12 @@ jobs:
           context: ./tickets
           file: ./tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            NODE_AUTH_TOKEN=${{ github.token }}
-            BUILDKIT_INLINE_CACHE=1
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:builder
           cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:builder
+          cache-to: type=inline
 
       - name: Build and push tickets runner
         uses: docker/build-push-action@v2
@@ -159,13 +155,13 @@ jobs:
           context: ./tickets
           file: ./tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: BUILDKIT_INLINE_CACHE=1
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           cache-from: |
-            registry.cloud.okteto.net/kch-chiu/tickets:builder
-            registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:builder
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
+          cache-to: type=inline
 
       # - name: Build and push tickets
       #   uses: okteto/build@latest
@@ -183,13 +179,12 @@ jobs:
           context: ./gateway
           file: ./gateway/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            NODE_AUTH_TOKEN=${{ github.token }}
-            BUILDKIT_INLINE_CACHE=1
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
           target: builder
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:builder
           cache-from: type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:builder
+          cache-to: type=inline
 
       - name: Build and push gateway runner
         uses: docker/build-push-action@v2
@@ -197,13 +192,13 @@ jobs:
           context: ./gateway
           file: ./gateway/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: BUILDKIT_INLINE_CACHE=1
           target: runner
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
           cache-from: |
-            registry.cloud.okteto.net/kch-chiu/gateway:builder
-            registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:builder
+            type=registry,ref=registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
+          cache-to: type=inline
 
       # - name: Build and push gateway
       #   uses: okteto/build@latest

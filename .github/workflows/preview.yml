@@ -28,7 +28,8 @@ jobs:
       - name: Build and push dgraph-api
         uses: docker/build-push-action@v2
         with:
-          file: dgraph-api/Dockerfile
+          context: ./dgraph-api
+          file: ./dgraph-api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
@@ -49,7 +50,8 @@ jobs:
       - name: Build and push payments
         uses: docker/build-push-action@v2
         with:
-          file: payments/Dockerfile
+          context: ./payments
+          file: ./payments/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
@@ -70,7 +72,8 @@ jobs:
       - name: Build and push orders
         uses: docker/build-push-action@v2
         with:
-          file: orders/Dockerfile
+          context: ./orders
+          file: ./orders/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
@@ -91,7 +94,8 @@ jobs:
       - name: Build and push tickets
         uses: docker/build-push-action@v2
         with:
-          file: tickets/Dockerfile
+          context: ./tickets
+          file: ./tickets/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true
@@ -112,7 +116,8 @@ jobs:
       - name: Build and push gateway
         uses: docker/build-push-action@v2
         with:
-          file: gateway/Dockerfile
+          context: ./gateway
+          file: ./gateway/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           build-args: NODE_AUTH_TOKEN=${{ github.token }}
           push: true

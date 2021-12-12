@@ -1,9 +1,10 @@
 FROM node:16.13.0-alpine AS base
 WORKDIR /usr/src/gateway
-COPY package.json package-lock.json .npmrc ./
+COPY package.json package-lock.json ./
 
 FROM base AS builder
 ARG NODE_AUTH_TOKEN
+COPY .npmrc .
 RUN npm ci --production
 RUN rm -f .npmrc
 

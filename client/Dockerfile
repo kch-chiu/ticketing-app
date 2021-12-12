@@ -1,11 +1,11 @@
-FROM node:16.13.0-alpine AS builder
-ARG NODE_AUTH_TOKEN
-WORKDIR /usr/src/app
+FROM node:16.13.0-alpine AS base
+WORKDIR /usr/src/client
 COPY package.json package-lock.json ./
+
+FROM base AS builder
 RUN npm ci --production
 
-FROM node:16.13.0-alpine AS runner
-WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/ /usr/src/app/
+FROM base AS runner
+COPY --from=builder /usr/src/client/node_modules ./node_modules
 COPY . .
 CMD ["npm", "start"]

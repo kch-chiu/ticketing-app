@@ -138,7 +138,6 @@ jobs:
           file: gateway/Dockerfile
           path: gateway
           buildargs: NODE_AUTH_TOKEN
-      
 
       - name: Trigger the pipeline
         uses: okteto/pipeline@master

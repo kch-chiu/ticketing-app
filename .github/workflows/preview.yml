@@ -25,6 +25,33 @@ jobs:
           username: kch-chiu
           password: ${{ secrets.OKTETO_TOKEN }}
 
+      - name: Build and push dgraph-api base
+        uses: docker/build-push-action@v2
+        with:
+          context: ./dgraph-api
+          file: ./dgraph-api/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          target: base
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,scope=base,mode=max
+
+      - name: Build and push dgraph-api builder
+        uses: docker/build-push-action@v2
+        with:
+          context: ./dgraph-api
+          file: ./dgraph-api/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          target: builder
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
+          cache-from: |
+            type=gha,scope=builder
+            type=gha,scope=base
+          cache-to: type=gha,scope=builder,mode=max
+
       - name: Build and push dgraph-api runner
         uses: docker/build-push-action@v2
         with:
@@ -36,9 +63,9 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/dgraph-api:${{ github.sha }}
           cache-from: |
-            type=gha,scope=base
-            type=gha,scope=builder
             type=gha,scope=runner
+            type=gha,scope=builder
+            type=gha,scope=base
           cache-to: type=gha,scope=runner,mode=max
 
       # - name: Build and push dgraph-api
@@ -51,6 +78,33 @@ jobs:
       #     path: dgraph-api
       #     buildargs: NODE_AUTH_TOKEN
 
+      - name: Build and push payments base
+        uses: docker/build-push-action@v2
+        with:
+          context: ./payments
+          file: ./payments/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          target: base
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,scope=base,mode=max
+
+      - name: Build and push payments builder
+        uses: docker/build-push-action@v2
+        with:
+          context: ./payments
+          file: ./payments/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          target: builder
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
+          cache-from: |
+            type=gha,scope=builder
+            type=gha,scope=base
+          cache-to: type=gha,scope=builder,mode=max
+
       - name: Build and push payments runner
         uses: docker/build-push-action@v2
         with:
@@ -62,9 +116,9 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/payments:${{ github.sha }}
           cache-from: |
-            type=gha,scope=base
-            type=gha,scope=builder
             type=gha,scope=runner
+            type=gha,scope=builder
+            type=gha,scope=base
           cache-to: type=gha,scope=runner,mode=max
 
       # - name: Build and push payments
@@ -77,6 +131,33 @@ jobs:
       #     path: payments
       #     buildargs: NODE_AUTH_TOKEN
 
+      - name: Build and push orders base
+        uses: docker/build-push-action@v2
+        with:
+          context: ./orders
+          file: ./orders/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          target: base
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,scope=base,mode=max
+
+      - name: Build and push orders builder
+        uses: docker/build-push-action@v2
+        with:
+          context: ./orders
+          file: ./orders/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          target: builder
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
+          cache-from: |
+            type=gha,scope=builder
+            type=gha,scope=base
+          cache-to: type=gha,scope=builder,mode=max
+
       - name: Build and push orders runner
         uses: docker/build-push-action@v2
         with:
@@ -88,9 +169,9 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/orders:${{ github.sha }}
           cache-from: |
-            type=gha,scope=base
-            type=gha,scope=builder
             type=gha,scope=runner
+            type=gha,scope=builder
+            type=gha,scope=base
           cache-to: type=gha,scope=runner,mode=max
 
       # - name: Build and push orders
@@ -103,6 +184,33 @@ jobs:
       #     path: orders
       #     buildargs: NODE_AUTH_TOKEN
 
+      - name: Build and push tickets base
+        uses: docker/build-push-action@v2
+        with:
+          context: ./tickets
+          file: ./tickets/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          target: base
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,scope=base,mode=max
+
+      - name: Build and push tickets builder
+        uses: docker/build-push-action@v2
+        with:
+          context: ./tickets
+          file: ./tickets/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          target: builder
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
+          cache-from: |
+            type=gha,scope=builder
+            type=gha,scope=base
+          cache-to: type=gha,scope=builder,mode=max
+
       - name: Build and push tickets runner
         uses: docker/build-push-action@v2
         with:
@@ -114,9 +222,9 @@ jobs:
           push: true
           tags: registry.cloud.okteto.net/kch-chiu/tickets:${{ github.sha }}
           cache-from: |
-            type=gha,scope=base
-            type=gha,scope=builder
             type=gha,scope=runner
+            type=gha,scope=builder
+            type=gha,scope=base
           cache-to: type=gha,scope=runner,mode=max
 
       # - name: Build and push tickets
@@ -128,6 +236,33 @@ jobs:
       #     file: tickets/Dockerfile
       #     path: tickets
       #     buildargs: NODE_AUTH_TOKEN
+
+      - name: Build and push gateway base
+        uses: docker/build-push-action@v2
+        with:
+          context: ./gateway
+          file: ./gateway/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          target: base
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,scope=base,mode=max
+
+      - name: Build and push gateway builder
+        uses: docker/build-push-action@v2
+        with:
+          context: ./gateway
+          file: ./gateway/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: NODE_AUTH_TOKEN=${{ github.token }}
+          target: builder
+          push: true
+          tags: registry.cloud.okteto.net/kch-chiu/gateway:${{ github.sha }}
+          cache-from: |
+            type=gha,scope=builder
+            type=gha,scope=base
+          cache-to: type=gha,scope=builder,mode=max
 
       - name: Build and push gateway runner
         uses: docker/build-push-action@v2

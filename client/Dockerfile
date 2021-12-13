@@ -3,7 +3,7 @@ WORKDIR /usr/src/client
 COPY package.json package-lock.json ./
 
 FROM base AS builder
-RUN npm ci --production
+RUN npm install --production
 
 FROM base AS runner
 COPY --from=builder /usr/src/client/node_modules ./node_modules

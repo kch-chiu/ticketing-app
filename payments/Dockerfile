@@ -5,7 +5,7 @@ COPY package.json package-lock.json ./
 FROM base AS builder
 ARG NODE_AUTH_TOKEN
 COPY .npmrc .
-RUN npm install --production
+RUN npm ci --production
 RUN rm -f .npmrc
 
 FROM base AS runner

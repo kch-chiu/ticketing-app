@@ -1,18 +1,18 @@
-import { app, dgraphSchemaString } from "./app";
-import { dgraphClientWrapper } from "./DgraphClientWrapper";
+import { app } from "./app";
+import { graphQLClientWrapper } from "./GraphQLClientWrapper";
+import _ from 'lodash';
 
 const start = async () => {
   console.log("Starting.............");
 
-  if (!process.env.DGRAPH_URI) {
-    throw new Error("DGRAPH_URI must be defined");
-  }
+  const { DGRAPH_API_URL } = process.env;
+
+  if (_.isEmpty(DGRAPH_API_URL))
+    throw new Error("DGRAPH_API_URL must be defined");
 
   try {
-    dgraphClientWrapper.connect(process.env.DGRAPH_URI);
+    graphQLClientWrapper.connect(DGRAPH_API_URL!);
     console.log("Connected to Dgraph");
-    await dgraphClientWrapper.setSchema(dgraphSchemaString);
-    console.log("Tickets Schema Loaded to Dgraph");
   } catch (err) {
     console.error(err);
   }

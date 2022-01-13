@@ -1,0 +1,23 @@
+type Ticket @key(fields: "ticketId") {
+  ticketId: ID!
+  title: String!
+  price: Float!
+}
+
+enum OrderStatus {
+  CREATED
+  CANCELLED
+  COMPLETE
+}
+
+type Order @key(fields: "orderId") {
+  orderId: ID!
+  status: OrderStatus!
+  ticket: Ticket!
+}
+
+type Payment @key(fields: "paymentId") {
+  paymentId: ID!
+  stripeId: String!
+  order: Order!
+}

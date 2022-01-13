@@ -15,16 +15,17 @@ type Order @key(fields: "orderId") {
 }
 
 extend type Query {
-  allOrders: [Order!]!
-  getOrder(orderId: ID!): Order!
+  getAllOrders: [Order]!
+  getOrder(orderId: ID!): Order
 }
 
 input OrderInput {
+  status: OrderStatus!
   ticketId: ID!
 }
 
 extend type Mutation {
-  createOrder(data: OrderInput!): Order!
-  cancelOrder(orderId: ID!): Order!
-  completeOrder(orderId: ID!): Order!
+  addOrder(data: OrderInput!): Order!
+  updateOrder(orderId: ID!, data: OrderInput!): Order
+  deleteOrder(orderId: ID!): Order
 }

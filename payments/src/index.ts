@@ -1,56 +1,31 @@
-import mongoose from "mongoose";
 import { app } from "./app";
-import { natsWrapper } from "./nats-wrapper";
-import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener";
-import { OrderCreatedListener } from "./events/listeners/order-created-listener";
+import Stripe from "stripe";
+import { graphQLClientWrapper } from "./GraphQLClientWrapper";
+import { stripeWrapper } from "./StripeWrapper";
+import _ from 'lodash';
 
 const start = async () => {
   console.log("Starting.............");
 
-  if (!process.env.JWT_KEY) {
-    throw new Error("JWT_KEY must be defined");
-  }
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI must be defined");
-  }
-  if (!process.env.NATS_CLIENT_ID) {
-    throw new Error("NATS_CLIENT_ID must be defined");
-  }
-  if (!process.env.NATS_URL) {
-    throw new Error("NATS_URL must be defined");
-  }
-  if (!process.env.NATS_CLUSTER_ID) {
-    throw new Error("NATS_CLUSTER_ID must be defined");
-  }
+  const { DGRAPH_API_URL, STRIPE_KEY, STRIPE_API_VERSION } = process.env;
+
+  if (_.isEmpty(DGRAPH_API_URL))
+    throw new Error("DGRAPH_API_URL must be defined");
+
+  if (_.isEmpty(STRIPE_KEY))
+    throw new Error("STRIPE_KEY must be defined");
 
   try {
-    await natsWrapper.connect(
-      process.env.NATS_CLUSTER_ID,
-      process.env.NATS_CLIENT_ID,
-      process.env.NATS_URL
-    );
-    natsWrapper.client.on("close", () => {
-      console.log("NATS connection closed!");
-      process.exit();
-    });
-    process.on("SIGINT", () => natsWrapper.client.close());
-    process.on("SIGTERM", () => natsWrapper.client.close());
-
-    new OrderCreatedListener(natsWrapper.client).listen();
-    new OrderCancelledListener(natsWrapper.client).listen();
-
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-    console.log("Connected to MongoDb");
+    graphQLClientWrapper.connect(DGRAPH_API_URL!);
+    console.log("Connected to Dgraph");
+    stripeWrapper.connect(STRIPE_KEY!, <Stripe.LatestApiVersion>STRIPE_API_VERSION);
+    console.log("Connected to stripe");
   } catch (err) {
     console.error(err);
   }
 
-  app.listen(3000, () => {
-    console.log("Listening on port 3000!!!!!!");
+  app.listen(4003, () => {
+    console.log("Listening on port 4003!!!!!!");
   });
 };
 

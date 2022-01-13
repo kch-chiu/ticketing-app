@@ -8,33 +8,49 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@master
-
-      - name: Login
-        uses: okteto/login@master
+          
+      - name: Login to Okteto Cloud
+        uses: okteto/context@latest
         with:
           token: ${{ secrets.OKTETO_TOKEN }}
-
-      - name: Activate Namespace
-        uses: okteto/namespace@master
-        with:
-          name: kch-chiu
+          namespace: kch-chiu
 
       - name: Trigger the pipeline
         uses: okteto/pipeline@master
         with:
+          name: ${{ github.workflow }}
           timeout: 10m
 
-      - name: Register schemas
+      - name: Publish GraphQL Dgraph schema
         env:
-          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
+          APOLLO_KEY: ${{ secrets.TICKETING_DGRAPH_API_KEY }}
         run: |
-          npx apollo service:push \
-            --graph=gateway-ticketing-graph \
-            --serviceName=tickets \
-            --serviceURL=http://tickets-srv:4001/graphql \
-            --localSchemaFile=tickets/src/graphql/schema.graphql
-          npx apollo service:push \
-            --graph=gateway-ticketing-graph \
-            --serviceName=orders \
-            --serviceURL=http://orders-srv:4002/graphql \
-            --localSchemaFile=orders/src/graphql/schema.graphql
+          npx -p @apollo/rover \
+            rover subgraph publish ticketing-dgraph-api \
+            --routing-url http://dgraph-srv:8080/graphql \
+            --schema dgraph/schema.graphql \
+            --name dgraph \
+            --convert
+
+      - name: Publish GraphQL API schemas
+        env:
+          APOLLO_KEY: ${{ secrets.TICKETING_GATEWAY_KEY }}
+        run: |
+          npx -p @apollo/rover \
+            rover subgraph publish ticketing-gateway \
+            --routing-url http://tickets-srv:4001/graphql \
+            --schema tickets/src/graphql/schema.graphql \
+            --name tickets \
+            --convert
+          npx -p @apollo/rover \
+            rover subgraph publish ticketing-gateway \
+            --routing-url http://orders-srv:4002/graphql \
+            --schema orders/src/graphql/schema.graphql \
+            --name orders \
+            --convert
+          npx -p @apollo/rover \
+            rover subgraph publish ticketing-gateway \
+            --routing-url http://payments-srv:4003/graphql \
+            --schema payments/src/graphql/schema.graphql \
+            --name payments \
+            --convert

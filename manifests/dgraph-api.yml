@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dgraph-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dgraph-api
+  template:
+    metadata:
+      labels:
+        app: dgraph-api
+    spec:
+      containers:
+        - name: dgraph-api
+          image: okteto/dgraph-api:buildTag
+          env:
+            - name: APOLLO_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ticketing-dgraph-api-key
+                  key: ticketing-dgraph-api-key
+            - name: APOLLO_GRAPH_REF
+              valueFrom:
+                configMapKeyRef:
+                  name: dgraph-api-config
+                  key: apollo-graph-ref
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: dgraph-api-config
+                  key: node-env
+          resources:
+            requests:
+              memory: '400Mi'
+              cpu: '200m'
+            limits:
+              memory: '800Mi'
+              cpu: '400m'
+  strategy:
+    type: Recreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dgraph-api-srv
+spec:
+  selector:
+    app: dgraph-api
+  ports:
+    - name: dgraph-api
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+    

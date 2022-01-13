@@ -1,5 +1,5 @@
-name: client-depl
-image: okteto/node:12
+name: client
+image: okteto/node:16
 command: bash
 sync:
 - .:/usr/src/app

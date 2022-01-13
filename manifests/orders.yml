@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      containers:
+        - name: orders
+          image: okteto/orders:buildTag
+          env:
+            - name: DGRAPH_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dgraph-api-config
+                  key: dgraph-api-url
+          resources:
+            requests:
+              memory: '400Mi'
+              cpu: '200m'
+            limits:
+              memory: '800Mi'
+              cpu: '400m'
+  strategy:
+    type: Recreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-srv
+spec:
+  selector:
+    app: orders
+  ports:
+    - name: orders
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets
+  template:
+    metadata:
+      labels:
+        app: tickets
+    spec:
+      containers:
+        - name: tickets
+          image: okteto/tickets:buildTag
+          env:
+            - name: DGRAPH_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dgraph-api-config
+                  key: dgraph-api-url
+          resources:
+            requests:
+              memory: '400Mi'
+              cpu: '200m'
+            limits:
+              memory: '800Mi'
+              cpu: '400m'
+  strategy:
+    type: Recreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 4001
+      targetPort: 4001

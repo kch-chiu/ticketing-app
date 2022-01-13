@@ -1,20 +1,24 @@
-import express from "express";
+import express, { Express } from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildFederatedSchema } from "@apollo/federation";
+import { buildSubgraphSchema } from "@apollo/federation";
 import "graphql-import-node";
 import * as typeDefs from "../src/graphql/schema.graphql";
 import resolvers from "../src/graphql/resolvers";
-import * as dgraphSchema from "../src/dgraph/dgraph-schema.graphql";
-import { print } from "graphql";
+import { Resolvers } from '../src/graphql/types';
+import { DocumentNode } from 'graphql';
 
 const app = express();
 
-const schema = buildFederatedSchema([{ typeDefs, resolvers }]);
+const startApolloServer = async (app: Express, typeDefs: DocumentNode, resolvers: Resolvers) => {
+  const schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
 
-const dgraphSchemaString = print(dgraphSchema);
+  const server = new ApolloServer({ schema });
 
-const server = new ApolloServer({ schema });
+  await server.start();
+  
+  server.applyMiddleware({ app });
+}
 
-server.applyMiddleware({ app });
+startApolloServer(app, typeDefs, resolvers);
 
-export { app, dgraphSchemaString };
+export { app };

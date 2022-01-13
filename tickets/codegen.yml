@@ -2,8 +2,6 @@ overwrite: true
 hooks:
   afterAllFileWrite:
     - prettier --write
-schema:
-  - ./src/graphql/schema.graphql
 generates:
   ./src/graphql/types.ts:
     schema: ./src/graphql/schema.graphql

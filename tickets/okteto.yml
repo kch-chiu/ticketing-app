@@ -1,8 +1,10 @@
-name: tickets-depl
-image: okteto/node:12
+name: tickets
+image: okteto/node:16
 command: bash
 sync:
 - .:/usr/src/app
+environment:
+  NODE_AUTH_TOKEN: $NODE_AUTH_TOKEN
 forward:
 - 4001:4001
 - 9301:9301

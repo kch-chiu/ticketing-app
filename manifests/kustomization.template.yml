@@ -2,11 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - tickets-depl.yml
-  - orders-depl.yml
-  - dgraph-single.yml
-  - ingress-srv.yml
-  - gateway-depl.yml
+  - tickets.yml
+  - orders.yml
+  - payments.yml
+  - ingress.yml
+  - gateway.yml
+  - dgraph.yml
+  - dgraph-api.yml
 
 configMapGenerator:
   - name: client-config
@@ -20,11 +22,26 @@ configMapGenerator:
       - client-stripe-pub=pk_test_51FTiiHFzQH4GYdNSelC82u5p5X10AOC8sglP6ePVWcCy4v376diHYPDPvay5Y5M6m7qCqXOHRKwsjTpaL1baKbhB00VwJrOImM
   - name: gateway-config
     literals:
+      - apollo-graph-ref=ticketing-gateway@current
       - node-env=production
+      - gateway-url=http://gateway-srv:4000/graphql
+  - name: payments-config
+    literals:
+      - stripe-api-version=2020-8-27
+      - stripe-payment-method-type=card
+      - stripe-currency=usd
+      - stripe-mode=payment
+      - stripe-callback-url=https://ticketing-app-kch-chiu.cloud.okteto.net/orders
+      - stripe-callback-url-success=success
+      - stripe-callback-url-cancel=cancel
+  - name: dgraph-api-config
+    literals:
+      - apollo-graph-ref=ticketing-dgraph-api@current
+      - node-env=production
+      - dgraph-api-url=http://dgraph-api-srv:5000/graphql
   - name: dgraph-config
     literals:
-      - dgraph-uri=http://dgraph-public:8080
-      - dgraph-alpha-security="whitelist=0.0.0.0/0"
+      - dgraph-alpha-security=whitelist=0.0.0.0/0
 
 secretGenerator:
   - name: github-client-secret
@@ -36,9 +53,12 @@ secretGenerator:
   - name: stripe-key
     literals:
       - stripe-key=$STRIPE_KEY
-  - name: apollo-key
+  - name: ticketing-gateway-key
     literals:
-      - apollo-key=$APOLLO_KEY
+      - ticketing-gateway-key=$TICKETING_GATEWAY_KEY
+  - name: ticketing-dgraph-api-key
+    literals:
+      - ticketing-dgraph-api-key=$TICKETING_DGRAPH_API_KEY
 
 generatorOptions:
   disableNameSuffixHash: true

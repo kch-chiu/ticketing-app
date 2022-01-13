@@ -1,207 +1,263 @@
 import { Resolvers, Ticket } from "./types";
-import { dgraphClientWrapper } from "../DgraphClientWrapper";
+import { graphQLClientWrapper } from "../GraphQLClientWrapper";
 import { UserInputError } from "apollo-server-express";
-import { Txn } from "dgraph-js-http";
+import { GraphQLClient, gql } from "graphql-request";
 
-const getTransaction = (forRead: boolean): Txn =>
-  forRead
-    ? dgraphClientWrapper.client.newTxn({ readOnly: true, bestEffort: true })
-    : dgraphClientWrapper.client.newTxn();
+interface TicketData {
+  ticket: Ticket;
+  allTickets: [Ticket];
+  addTicketPayload: {
+    ticket: [Ticket]
+  }
+  updateTicketPayload: {
+    ticket: [Ticket]
+  }
+  deleteTicketPayload: {
+    ticket: [Ticket]
+  }
+}
+
+const getGraphQLClient = (): GraphQLClient => <GraphQLClient>graphQLClientWrapper.client;
 
 const resolvers: Resolvers = {
   Ticket: {
     __resolveReference: async ({ ticketId }) => {
-      // Create a new transaction.
-      const forRead = true;
-      const txn = getTransaction(forRead);
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
-      let ticket;
-
-      try {
-        // Create a query.
-        const query = `
-        {
-          dgraphGetTicket(func: has(title)) @filter(uid_in(~title, ${ticketId})) {
-            ticketId: uid
+      // Create a query
+      const query = gql`
+        query getTicket($ticketId: ID!) {
+          ticket: getTicket(ticketId: $ticketId) {
+            ticketId
             title
             price
           }
         }
-        `;
+      `;
 
-        // Run query and get ticket.
-        const res = await txn.query(query);
-        ticket = <Ticket>res.data;
+      // Create variables for query
+      const variables = {
+        ticketId
+      };
 
-        // Commit transaction.
-        await txn.commit();
-      } finally {
-        // Clean up transaction.
-        await txn.discard();
+      // Run query and get ticket
+      let data;
+      try {
+        data = <TicketData>await graphQLClient.request(query, variables);
+      } catch (error) {
+        throw new UserInputError("Invalid ticketId");
       }
+
+      const { ticket } = data;
+
+      if (!ticket)
+        throw new UserInputError("Ticket cannot be found");
 
       return ticket;
-    },
+    }
   },
   Query: {
-    allTickets: async () => {
-      // Create a new transaction.
-      const forRead = true;
-      const txn = getTransaction(forRead);
+    getAllTickets: async () => {
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
-      let allTickets;
-
-      try {
-        // Create a query.
-        const query = `
-        {
-          dgraphAllTickets(func: has(title)) {
-            ticketId: uid
+      // Create a query
+      const query = gql`
+        query getAllTickets {
+          allTickets: queryTicket {
+            ticketId
             title
             price
           }
         }
-        `;
+      `;
 
-        // Run query and get all tickets.
-        const res = await txn.query(query);
-        allTickets = <Ticket[]>res.data;
-
-        // Commit transaction.
-        await txn.commit();
-      } finally {
-        // Clean up.
-        await txn.discard();
+      // Run query and get all tickets
+      let data;
+      try {
+        data = <TicketData>await graphQLClient.request(query);
+      } catch (error) {
+        throw new UserInputError("Cannot fetch tickets");
       }
+
+      const { allTickets } = data;
+
       return allTickets;
     },
     getTicket: async (_: any, { ticketId }) => {
-      // Create a new transaction.
-      const forRead = true;
-      const txn = getTransaction(forRead);
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
-      let ticket;
-
-      try {
-        // Create a query.
-        const query = `
-        {
-          dgraphGetTicket(func: has(title)) @filter(uid_in(~title, ${ticketId})) {
-            ticketId: uid
+      // Create a query.
+      const query = gql`
+        query getTicket($ticketId: ID!) {
+          ticket: getTicket(ticketId: $ticketId) {
+            ticketId
             title
             price
           }
         }
-        `;
+      `;
 
-        // Run query and get ticket.
-        const res = await txn.query(query);
-        ticket = <Ticket>res.data;
+      // Create variables for query
+      const variables = {
+        ticketId
+      };
 
-        if (!ticket) {
-          throw new UserInputError("Invalid ticketId");
-        }
-
-        // Commit transaction.
-        await txn.commit();
-      } finally {
-        // Clean up.
-        await txn.discard();
+      // Run query and get ticket
+      let data;
+      try {
+        data = <TicketData>await graphQLClient.request(query, variables);
+      } catch (error) {
+        throw new UserInputError("Invalid ticketId");
       }
+
+      const { ticket } = data;
+
+      if (!ticket)
+        throw new UserInputError("Cannot find ticket");
 
       return ticket;
     },
   },
   Mutation: {
-    createTicket: async (_: any, { data }) => {
-      // Create a new transaction.
-      const forRead = false;
-      const txn = getTransaction(forRead);
+    addTicket: async (_: any, { data: inputData }) => {
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
 
-      let ticketId;
+      const { title, price } = inputData;
 
-      const { price } = data;
-
-      if (price <= 0) {
+      if (!title)
+        throw new UserInputError("Title can't be empty");
+        
+      if (price <= 0)
         throw new UserInputError("Price must be greater than 0");
-      }
 
-      try {
-        // Run mutation and get ticketId.
-        const assigned = await txn.mutate({
-          setJson: data,
-        });
-        ticketId = assigned.data.uids["blank-0"];
+      // Create a mutation
+      const mutation = gql`
+        mutation addTicket($addTicketInput: [AddTicketInput!]!) {
+          addTicketPayload: addTicket(input: $addTicketInput) {
+            ticket {
+              ticketId
+              title
+              price
+            }
+          }
+        }
+      `;
 
-        console.log("All created nodes (map from blank node names to uids):");
-        Object.keys(assigned.data.uids).forEach((key) =>
-          console.log(`${key} => ${assigned.data.uids[key]}`)
-        );
-        console.log();
-
-        // Commit transaction.
-        await txn.commit();
-      } finally {
-        // Clean up.
-        await txn.discard();
-      }
-
-      return {
-        ticketId,
-        ...data,
+      // Create variables for mutation
+      const variables = {
+        "addTicketInput": [
+          {
+            title,
+            price
+          }
+        ]
       };
-    },
-    updateTicket: async (_: any, { ticketId, data }) => {
-      // Create a new transaction.
-      const forRead = false;
-      const txn = getTransaction(forRead);
 
-      const { price } = data;
-
-      if (price <= 0) {
-        throw new UserInputError("Price must be greater than zero");
+      // Run mutation
+      let data;
+      try {
+        data = <TicketData>await graphQLClient.request(mutation, variables);
+      } catch (error) {
+        throw new UserInputError("Cannot create ticket");
       }
 
-      try {
-        // Create a query.
-        const query = `
-        {
-          dgraphGetTicket(func: has(title)) @filter(uid_in(~title, ${ticketId})) {
-            ticketId: uid
-            title
+      const [ ticket ] = data.addTicketPayload.ticket;
+
+      return ticket;
+    },
+    updateTicket: async (_: any, { ticketId, data: inputData }) => {
+      // Get an instance of GrahpQLClient.
+      const graphQLClient = getGraphQLClient();
+
+      const { title, price } = inputData;
+
+      if (price <= 0)
+        throw new UserInputError("Price must be greater than zero");
+
+      // Create a mutation
+      const mutation = gql`
+        mutation updateTicket($updateTicketInput: UpdateTicketInput!) {
+          updateTicketPayload: updateTicket(input: $updateTicketInput) {
+            ticket {
+              ticketId
+              title
+              price
+            }
+          }
+        }
+      `;
+
+      // Define variables for mutation
+      const variables = {
+        "updateTicketInput": {
+          "filter": {
+            ticketId
+          },
+          "set": {
+            title,
             price
           }
         }
-        `;
+      };
 
-        // Run query.
-        const res = await txn.query(query);
-        const ticket = <Ticket>res.data;
-
-        if (!ticket) {
-          throw new UserInputError("Invalid ticketId")
-        }
-
-        // Run mutation.
-        await txn.mutate({
-          setJson: {
-            ticketId,
-            ...data,
-          },
-        });
-
-        // Commit transaction.
-        await txn.commit();
-      } finally {
-        // Clean up.
-        await txn.discard();
+      // Run mutation
+      let data;
+      try {
+        data = <TicketData>await graphQLClient.request(mutation, variables);
+      } catch (errors) {
+        throw new UserInputError("Invalid ticketId");
       }
 
-      return {
-        ticketId,
-        ...data,
-      };
+      const [ ticket ] = data.updateTicketPayload.ticket;
+
+      if (!ticket)
+        throw new UserInputError("Cannot update ticket since ticketId not found");
+
+      return ticket;
     },
+    deleteTicket: async (_: any, { ticketId }) => {
+      // Get an instance of GraphQLClient
+      const graphQLClient = getGraphQLClient();
+
+      // Create a mutation
+      const mutation = gql`
+        mutation deleteTicket($deleteTicketFilter: TicketFilter!) {
+          deleteTicketPayload: deleteTicket(filter: $deleteTicketFilter) {
+            ticket {
+              ticketId
+              title
+              price
+            }
+          }
+        }
+      `;
+
+      // Define variables for mutation
+      const variables = {
+        "deleteTicketFilter": {
+          ticketId
+        }
+      };
+
+      // Run mutation
+      let data;
+      try {
+        data = <TicketData>await graphQLClient.request(mutation, variables);
+      } catch (errors) {
+        throw new UserInputError("Invalid ticketId");
+      }
+
+      const [ ticket ] = data.deleteTicketPayload.ticket;
+
+      if (!ticket)
+        throw new UserInputError("Cannot delete ticket since ticketId not found");
+
+      return ticket;
+    }
   },
 };
 

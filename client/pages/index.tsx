@@ -1,10 +1,16 @@
+import { GetServerSideProps } from "next";
+import type { Session } from "next-auth";
 import Link from "next/link";
-import { useSession, getSession } from 'next-auth/client';
+import { useSession, getSession } from "next-auth/react";
 import buildApiClient from "../ssr/buildApiClient";
 import Header from "../components/header";
 
 const LandingPage = ({ tickets }) => {
-  const [ session ] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
+
+  if (typeof window !== "undefined" && loading) return null;
+
   const ticketList = tickets.map((ticket) => {
     return (
       <tr key={ticket.id}>
@@ -39,9 +45,11 @@ const LandingPage = ({ tickets }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<{
+  session: Session | null;
+}> = async (context) => {
   const session = await getSession(context);
-  
+
   const apiClient = buildApiClient(context);
 
   const ticketsRelativeURL = process.env.NEXT_PUBLIC_TICKETS_RELATIVEURL;

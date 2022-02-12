@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 
 const useRequest = ({ url, method, body, onSuccess }) => {
-  const [errors, setErrors] = useState(null);
+  const [ errors, setErrors ] = useState();
 
   const doRequest = async (props = {}) => {
     try {
@@ -16,6 +16,8 @@ const useRequest = ({ url, method, body, onSuccess }) => {
       return response.data;
     } catch (err) {
       setErrors(
+        // To Fix
+        // @ts-ignore
         <div className="alert alert-danger">
           <h4>Ooops....</h4>
           <ul className="my-0">

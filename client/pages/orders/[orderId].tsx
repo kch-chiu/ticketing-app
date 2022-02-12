@@ -1,5 +1,7 @@
+import { GetServerSideProps } from "next";
+import type { Session } from "next-auth";
 import { useState, useEffect } from "react";
-import { useSession, getSession } from "next-auth/client";
+import { useSession, getSession } from "next-auth/react";
 import { loadStripe } from "@stripe/stripe-js";
 import useRequest from "../../hooks/use-request";
 import buildApiClient from "../../ssr/buildApiClient";
@@ -7,13 +9,16 @@ import buildApiClient from "../../ssr/buildApiClient";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUB);
 
 const OrderShow = ({ order }) => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   if (typeof window !== "undefined" && loading) return null;
 
   const [timeLeft, setTimeLeft] = useState(0);
   const paymentsRelativeURL = process.env.NEXT_PUBLIC_PAYMENTS_RELATIVEURL;
   const { id: orderId, ticket: orderTicket } = order;
+  // To Fix
+  // @ts-ignore
   const { doRequest, errors } = useRequest({
     url: `${paymentsRelativeURL}`,
     method: "post",
@@ -25,6 +30,8 @@ const OrderShow = ({ order }) => {
 
   useEffect(() => {
     const findTimeLeft = () => {
+      // To Fix
+      // @ts-ignore
       const msLeft = new Date(order.expiresAt) - new Date();
       setTimeLeft(Math.round(msLeft / 1000));
     };
@@ -75,7 +82,9 @@ const OrderShow = ({ order }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<{
+  session: Session | null;
+}> = async (context) => {
   const session = await getSession(context);
   const apiClient = buildApiClient(context);
 

@@ -1,11 +1,14 @@
+import { GetServerSideProps } from "next";
+import type { Session } from "next-auth";
 import { useState } from "react";
 import Router from "next/router";
-import { useSession, getSession } from "next-auth/client";
+import { useSession, getSession } from "next-auth/react";
 import useRequest from "../../hooks/use-request";
 import Header from "../../components/header";
 
 const NewTicket = () => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   if (typeof window !== "undefined" && loading) return null;
 
@@ -70,7 +73,9 @@ const NewTicket = () => {
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<{
+  session: Session | null;
+}> = async (context) => {
   const session = await getSession(context);
   return {
     props: { session },

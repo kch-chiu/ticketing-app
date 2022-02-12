@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signIn, signOut } from 'next-auth/client';
+import { signIn, signOut } from 'next-auth/react';
 
 const Header = ({ session }) => {
   const links = [
